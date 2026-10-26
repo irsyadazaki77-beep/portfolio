@@ -1,6 +1,6 @@
-# Portofolio Profesional — Irsyad Zaki 🚀
+# Portofolio Resmi — Zaki Irsyada Putra 🚀
 
-Website portofolio interaktif dan modern yang dirancang khusus untuk memamerkan keahlian di bidang **Web Development (Frontend)** dan **UI/UX Design**.
+Website portofolio profesional dan interaktif yang merefleksikan profil lengkap **Zaki Irsyada Putra**: Mahasiswa Sistem Informasi di Telkom University Surabaya, Software & AI Engineer, dan Data & Technology Enthusiast.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/irsyadazaki77-beep/portfolio?style=flat-square&color=6366f1)
 ![GitHub repo size](https://img.shields.io/github/repo-size/irsyadazaki77-beep/portfolio?style=flat-square&color=emerald)
@@ -10,50 +10,52 @@ Website portofolio interaktif dan modern yang dirancang khusus untuk memamerkan 
 
 ---
 
-## ✨ Fitur-Fitur Unggulan
-
-- 🎨 **UI/UX Modern & Responsif**: Dibangun dengan Tailwind CSS, grid layout dinamis, tipografi elegan (Plus Jakarta Sans & Outfit), serta efek glassmorphism.
-- 🌓 **Mode Gelap & Terang (Dark/Light)**: Toggle tema otomatis yang mengingat preferensi pengguna via `localStorage` dan pintasan keyboard (tombol `T`).
-- 🌈 **Theme Accent Customizer**: Pengunjung dapat mengganti warna aksen tema langsung di halaman (Indigo, Violet, Emerald, Cyan).
-- ⌨️ **Efek Animasi Typewriter**: Headline dinamis yang menyorot berbagai fokus keahlian.
-- 🗂️ **Filter Proyek Interaktif**: Memfilter proyek berdasarkan kategori *Web Dev*, *UI/UX Design*, dan *Interactive/3D Games*.
-- 📋 **Salin Email Instan**: Fitur salin alamat email ke clipboard dengan notifikasi toast visual yang halus.
-- 📱 **Navigasi Mobile Friendly**: Drawer menu navigasi melayang yang adaptif untuk segala ukuran layar smartphone dan tablet.
-- ⚡ **Ringan & Performa Tinggi**: Menggunakan arsitektur web statis tanpa dependensi berat (skor PageSpeed optimal).
+## 👨‍💻 Profil Singkat
+- **Nama:** Zaki Irsyada Putra
+- **Perguruan Tinggi:** S1 Sistem Informasi, Telkom University Surabaya (2025 - Sekarang)
+- **Fokus Keahlian:** Rekayasa Perangkat Lunak Full-Stack (React 19, TypeScript, Express.js), Sistem AI & LLM (Gemini API, SSE Streaming), Keamanan Privasi (AES-256-GCM, PII Scrubbing), serta Analisis Data & Strategi Bisnis (DSS).
+- **Pengalaman Utama:** Ex-Marketing Manager di PT AGRA DANAPATI PARAMA & Ketua Tim Kompetisi Bisnis Tingkat Nasional (Awakening Reborn).
 
 ---
 
-## 🛠️ Teknologi yang Digunakan
+## ✨ Proyek Unggulan
 
-- **HTML5** (Semantik W3C & SEO Optimized)
-- **Tailwind CSS** (Utility-first CSS Framework & Design Tokens)
-- **Vanilla JavaScript (ES6+)** (State, Filter, Theme Switching & DOM Events)
-- **Lucide Icons** (Ikon vektor modern & konsisten)
-- **Google Fonts** (*Plus Jakarta Sans*, *Outfit*, & *JetBrains Mono*)
-- **GitHub Actions & GitHub Pages** (Automated Continuous Deployment)
+1. **RuangTenang Kampus** — Platform Kesehatan Mental & Konseling Mahasiswa Berbasis AI (Production-Ready)
+   - React 19, TypeScript, Express.js, Prisma ORM, SQLite/PostgreSQL.
+   - Asisten AI reflektif (CBT) bertenaga Gemini API (@google/genai) via server-side proxy & SSE streaming.
+   - Arsitektur privasi Privacy by Design: PII scrubbing otomatis, deteksi krisis multi-lapis, dan enkripsi data sensitif AES-256-GCM.
+   - Skrining klinis PHQ-9 & GAD-7 mandiri.
+2. **ImpactGrid** — AI-Powered Network Sustainability Decision Support System
+   - Studi Kasus Telkomsel pada TDC Summit Fest 2026.
+   - Mengoptimalkan investasi efisiensi energi BTS/RAN untuk mitigasi 63,6% emisi Scope 2.
+   - 4 Pilar: Network Data Hub, Scenario Lab, Investment Prioritizer, dan ESG Impact Verification.
+3. **SiKaya** — Platform Edukasi & Analisis Investasi Multi-Aset (Saham, Crypto, Obligasi, Emas).
+4. **UOT** — Platform Pembelajaran Digital Interaktif berbasis mobile-friendly responsive web.
+5. **OmniTRAF** — Dashboard Visualisasi Telemetri & Monitoring Lalu Lintas Cerdas.
+6. **Voxel-Verse** — Eksplorasi Kreatif 3D WebGL Canvas di Browser.
 
 ---
 
-## 🚀 Panduan Menjalankan Secara Lokal
+## 🏆 Kredensial & Sertifikasi
+- **Associate Data Scientist + Python** — Digital Talent Academy, Komdigi (31 Jam)
+- **Data Scientist Supervisor** — Digital Talent Academy, Komdigi (20 Jam)
+- **Microsoft Fabric & Azure Fundamentals** — Komdigi & Microsoft (17 Jam)
+- **AI Engineer For Milenial** — Komdigi
+- **Implementasi Kecerdasan Artifisial** — Komdigi
+- **Cyber Security & Career Awareness** — Komdigi
+- **Programming Certificate** — Prodistik ITS
+- **Basic AI Certificate** — Dicoding Indonesia
 
-1. Clone repositori ini:
-   ```bash
-   git clone https://github.com/irsyadazaki77-beep/portfolio.git
-   cd portfolio
-   ```
+---
 
-2. Buka langsung di browser:
-   - Cukup klik dua kali berkas `index.html`, atau
-   - Jalankan local server (opsional):
-     ```bash
-     npx serve .
-     # atau
-     python -m http.server 3000
-     ```
+## 📥 Berkas CV
+- `CV_Zaki_Irsyada_Putra.pdf` (Tersedia tombol unduh langsung di website)
+- `CV_Zaki_Irsyada_Putra.docx`
 
 ---
 
 ## 📬 Kontak
-
-- **Email**: [irsyadazaki77@gmail.com](mailto:irsyadazaki77@gmail.com)
-- **GitHub**: [@irsyadazaki77-beep](https://github.com/irsyadazaki77-beep)
+- **Email:** [irsyadazaki77@gmail.com](mailto:irsyadazaki77@gmail.com)
+- **WhatsApp:** [+62 821-9806-9550](https://wa.me/6282198069550)
+- **GitHub:** [@irsyadazaki77-beep](https://github.com/irsyadazaki77-beep)
+- **Lokasi:** Surabaya, Jawa Timur & Timika, Papua Tengah
