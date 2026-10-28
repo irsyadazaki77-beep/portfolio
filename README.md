@@ -1,6 +1,6 @@
 # Portofolio Resmi — Zaki Irsyada Putra 🚀
 
-Website portofolio profesional dan interaktif yang merefleksikan profil lengkap **Zaki Irsyada Putra**: Mahasiswa Sistem Informasi di Telkom University Surabaya, Software & AI Engineer, dan Data & Technology Enthusiast.
+Website portofolio profesional, modern, dan highly interactive yang merefleksikan profil lengkap **Zaki Irsyada Putra**: Mahasiswa Sistem Informasi di Telkom University Surabaya, Software & AI Engineer, dan Data & Technology Enthusiast.
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/irsyadazaki77-beep/portfolio?style=flat-square&color=6366f1)
 ![GitHub repo size](https://img.shields.io/github/repo-size/irsyadazaki77-beep/portfolio?style=flat-square&color=emerald)
@@ -18,6 +18,19 @@ Website portofolio profesional dan interaktif yang merefleksikan profil lengkap 
 
 ---
 
+## ⚡ Fitur Interaktivitas & Animasi Modern
+- 🌌 **Interactive Hero Particle Canvas**: Partikel dinamis pada canvas latar belakang yang merespons pergerakan kursor mouse secara fluid dan halus.
+- 💡 **Card Mouse Spotlight Glow**: Kilau radial gradien yang mengikuti posisi kursor pengguna di sekeliling border kartu proyek dan sertifikat (inspirasi Linear/Vercel).
+- 🎴 **Subtle 3D Perspective Tilt**: Efek kemiringan 3D halus saat kartu disorot dengan mouse.
+- 📊 **Scroll Reading Progress Bar**: Indikator persentase pembacaan halaman di bagian paling atas layar.
+- 🔢 **Animated Stats Counter**: Angka statistik beranimasi menghitung naik (*count-up*) saat di-scroll ke viewport.
+- 🪟 **Interactive Project Deep-Dive Modal**: Modal detail arsitektur, tantangan teknis, dan solusi tanpa harus meninggalkan halaman web.
+- 📜 **In-Page Certificate Viewer Modal**: Pratinjau langsung sertifikat resmi (PDF/JPG) dengan tombol unduh dan buka layar penuh.
+- 💻 **Developer Terminal CLI Easter-Egg (`>_ Terminal Zaki`)**: Terminal interaktif di pojok kanan bawah yang mendukung perintah `help`, `about`, `skills`, `projects`, `awards`, `certs`, `contact`, dan `sudo hire`!
+- 🔊 **Micro-Audio Feedback**: Efek suara sintetis klik halus (Web Audio API) dengan tombol toggle suara on/off di navbar.
+
+---
+
 ## 🏆 Prestasi & Kompetisi Nasional Unggulan
 - 🥇 **JUARA 1 NASIONAL** — *Business Case Competition INSIGHT 2025* (HMSI Telkom University Surabaya, Sep 2025)
 - 🥈 **SEMI-FINALIS** — *YED UI 2025 Business Plan Competition* (BEM FMIPA Universitas Indonesia)
@@ -31,44 +44,26 @@ Website portofolio profesional dan interaktif yang merefleksikan profil lengkap 
 ---
 
 ## ✨ Proyek Unggulan
-
 1. **RuangTenang Kampus** — Platform Kesehatan Mental & Konseling Mahasiswa Berbasis AI (Production-Ready)
-   - React 19, TypeScript, Express.js, Prisma ORM, SQLite/PostgreSQL.
-   - Asisten AI reflektif (CBT) bertenaga Gemini API (`@google/genai`) via server-side proxy & SSE streaming.
-   - Arsitektur privasi Privacy by Design: PII scrubbing otomatis, deteksi krisis multi-lapis, dan enkripsi data sensitif AES-256-GCM.
-   - Skrining klinis PHQ-9 & GAD-7 mandiri.
-2. **ImpactGrid** — AI-Powered Network Sustainability Decision Support System
-   - Studi Kasus Telkomsel pada TDC Summit Fest 2026.
-   - Mengoptimalkan investasi efisiensi energi BTS/RAN untuk mitigasi 63,6% emisi Scope 2.
-   - 4 Pilar: Network Data Hub, Scenario Lab, Investment Prioritizer, dan ESG Impact Verification.
-3. **SiKaya** — Platform Edukasi & Analisis Investasi Multi-Aset (Saham, Crypto, Obligasi, Emas).
-4. **UOT** — Platform Pembelajaran Digital Interaktif berbasis mobile-friendly responsive web.
-5. **OmniTRAF** — Dashboard Visualisasi Telemetri & Monitoring Lalu Lintas Cerdas.
-6. **Voxel-Verse** — Eksplorasi Kreatif 3D WebGL Canvas di Browser.
+2. **ImpactGrid** — AI-Powered Network Sustainability Decision Support System (Studi Kasus Telkomsel)
+3. **SiKaya** — Platform Edukasi & Analisis Investasi Multi-Aset (Saham, Crypto, Obligasi, Emas)
+4. **UOT** — Platform Pembelajaran Digital Interaktif
+5. **OmniTRAF** — Dashboard Visualisasi Telemetri Lalu Lintas
+6. **Voxel-Verse** — Eksplorasi 3D WebGL Canvas di Browser
 
 ---
 
 ## 📜 Lisensi & Sertifikasi Profesional Terverifikasi
-- **Associate Data Scientist + Python (Nasional)** — Digital Talent Academy, Komdigi (31 Jam)
-- **Data Scientist Supervisor (Nasional)** — Digital Talent Academy, Komdigi (20 Jam)
+- **Associate Data Scientist + Python (Nasional)** — Komdigi (31 Jam)
+- **Data Scientist Supervisor (Nasional)** — Komdigi (20 Jam)
 - **Fundamental of Microsoft Fabric & Azure (Nasional)** — Komdigi & Microsoft (17 Jam)
-- **Belajar Dasar AI** — Dicoding Indonesia (ID: `GRX5JWY9KX0M`, 10 Jam)
-- **Dasar-dasar Keamanan AI** — Pusbang Ekosistem SDM Komdigi & Microsoft
-- **AI Engineer For Milenial** — Digital Talent Scholarship, Komdigi
-- **Sertifikat Analisis Data Excel** — Microsoft Skills for Jobs
-- **Jago Project Management dari Nol** — Microsoft Skills for Jobs
-- **Introduction to Cyber Security and Career Awareness** — Komdigi
-- **Ethical Hacker For Dummies** — Komdigi
-- **Kenali dan Lindungi Data Pribadi** — Komdigi
+- **Belajar Dasar AI** — Dicoding Indonesia (ID: `GRX5JWY9KX0M`)
+- **Dasar-dasar Keamanan AI** — Komdigi & Microsoft
+- **AI Engineer For Milenial** — Komdigi
+- **Sertifikat Analisis Data Excel & Project Management** — Microsoft Skills for Jobs
+- **Cyber Security Awareness & Ethical Hacking** — Komdigi
+- **Kenali dan Lindungi Data Pribadi** — Komdigi (UU PDP)
 - **Fundamental Public Speaking Training** — Grow Insight x FES Management
-
-*Seluruh dokumen sertifikat tersimpan dan dapat diverifikasi langsung melalui folder `certificates/`.*
-
----
-
-## 📥 Berkas CV
-- `CV_Zaki_Irsyada_Putra.pdf` (Tersedia tombol unduh langsung di website)
-- `CV_Zaki_Irsyada_Putra.docx`
 
 ---
 
