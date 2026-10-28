@@ -25,1248 +25,10 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 
   <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com">
-    // 9. Certificate Filtering Logic
-    const certFilterButtons = document.querySelectorAll('.cert-filter-btn');
-    const certCards = document.querySelectorAll('.cert-card');
-
-    certFilterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        certFilterButtons.forEach(b => {
-          b.classList.remove('active', 'bg-brand-600', 'text-white');
-          b.classList.add('text-slate-600', 'dark:text-slate-300');
-        });
-
-        btn.classList.add('active', 'bg-brand-600', 'text-white');
-        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
-
-        const filterValue = btn.getAttribute('data-cert-filter');
-
-        certCards.forEach(card => {
-          const category = card.getAttribute('data-category');
-          if (filterValue === 'all' || category === filterValue) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
-
-  
-    // ================= 10. INTERACTIVE AUDIO SYNTHESIZER =================
-    let audioCtx = null;
-    let isSoundEnabled = false;
-    const soundToggleBtn = document.getElementById('soundToggleBtn');
-    const soundOnIcon = document.getElementById('soundOnIcon');
-    const soundOffIcon = document.getElementById('soundOffIcon');
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
-
-    function playClickSound(freq = 600, duration = 0.04) {
-      if (!isSoundEnabled) return;
-      try {
-        initAudio();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {}
-    }
-
-    soundToggleBtn?.addEventListener('click', () => {
-      isSoundEnabled = !isSoundEnabled;
-      if (isSoundEnabled) {
-        initAudio();
-        soundOnIcon?.classList.remove('hidden');
-        soundOffIcon?.classList.add('hidden');
-        playClickSound(800, 0.06);
-        showToast('🔊 Efek suara interaktif diaktifkan');
-      } else {
-        soundOnIcon?.classList.add('hidden');
-        soundOffIcon?.classList.remove('hidden');
-        showToast('🔇 Efek suara dinonaktifkan');
-      }
-    });
-
-    document.querySelectorAll('button, a, .filter-btn, .cert-filter-btn').forEach(el => {
-      el.addEventListener('mouseenter', () => playClickSound(300, 0.02));
-      el.addEventListener('click', () => playClickSound(550, 0.04));
-    });
-
-    // ================= 11. SCROLL READING PROGRESS BAR =================
-    const scrollProgressBar = document.getElementById('scrollProgressBar');
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      if (scrollProgressBar) {
-        scrollProgressBar.style.width = scrollPercent + '%';
-      }
-    });
-
-    // ================= 12. HERO INTERACTIVE PARTICLE CANVAS =================
-    const canvas = document.getElementById('heroParticles');
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      let particles = [];
-      let width = canvas.width = canvas.parentElement.offsetWidth;
-      let height = canvas.height = canvas.parentElement.offsetHeight;
-      let mouse = { x: null, y: null, radius: 120 };
-
-      window.addEventListener('resize', () => {
-        if (!canvas.parentElement) return;
-        width = canvas.width = canvas.parentElement.offsetWidth;
-        height = canvas.height = canvas.parentElement.offsetHeight;
-        initParticles();
-      });
-
-      canvas.parentElement.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-      });
-
-      canvas.parentElement.addEventListener('mouseleave', () => {
-        mouse.x = null;
-        mouse.y = null;
-      });
-
-      class Particle {
-        constructor() {
-          this.x = Math.random() * width;
-          this.y = Math.random() * height;
-          this.size = Math.random() * 2 + 1;
-          this.baseX = this.x;
-          this.baseY = this.y;
-          this.density = (Math.random() * 20) + 5;
-          this.vx = (Math.random() - 0.5) * 0.8;
-          this.vy = (Math.random() - 0.5) * 0.8;
-        }
-
-        draw() {
-          ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(165, 180, 252, 0.5)' : 'rgba(99, 102, 241, 0.4)';
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.closePath();
-          ctx.fill();
-        }
-
-        update() {
-          this.x += this.vx;
-          this.y += this.vy;
-
-          if (this.x < 0 || this.x > width) this.vx *= -1;
-          if (this.y < 0 || this.y > height) this.vy *= -1;
-
-          if (mouse.x != null && mouse.y != null) {
-            let dx = mouse.x - this.x;
-            let dy = mouse.y - this.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < mouse.radius) {
-              let force = (mouse.radius - distance) / mouse.radius;
-              let directionX = (dx / distance) * force * this.density * 0.5;
-              let directionY = (dy / distance) * force * this.density * 0.5;
-              this.x += directionX;
-              this.y += directionY;
-            }
-          }
-        }
-      }
-
-      function initParticles() {
-        particles = [];
-        const count = Math.min(Math.floor((width * height) / 14000), 75);
-        for (let i = 0; i < count; i++) {
-          particles.push(new Particle());
-        }
-      }
-
-      function connectParticles() {
-        for (let a = 0; a < particles.length; a++) {
-          for (let b = a + 1; b < particles.length; b++) {
-            let dx = particles[a].x - particles[b].x;
-            let dy = particles[a].y - particles[b].y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 100) {
-              let opacity = 1 - (dist / 100);
-              ctx.strokeStyle = document.documentElement.classList.contains('dark') ? `rgba(129, 140, 248, ${opacity * 0.15})` : `rgba(99, 102, 241, ${opacity * 0.12})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(particles[a].x, particles[a].y);
-              ctx.lineTo(particles[b].x, particles[b].y);
-              ctx.stroke();
-            }
-          }
-        }
-      }
-
-      function animateParticles() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-          p.update();
-          p.draw();
-        });
-        connectParticles();
-        requestAnimationFrame(animateParticles);
-      }
-
-      initParticles();
-      animateParticles();
-    }
-
-    // ================= 13. SPOTLIGHT HOVER & 3D TILT EFFECT =================
-    document.querySelectorAll('.spotlight-card').forEach(card => {
-      card.addEventListener('pointermove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-
-        if (card.classList.contains('tilt-card') && window.innerWidth > 768) {
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -5;
-          const rotateY = ((x - centerX) / centerX) * 5;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
-        }
-      });
-
-      card.addEventListener('pointerleave', () => {
-        if (card.classList.contains('tilt-card')) {
-          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        }
-      });
-    });
-
-    // ================= 14. SCROLL REVEAL & STAGGER ANIMATIONS =================
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('reveal-visible');
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.reveal-on-scroll').forEach((el, index) => {
-      el.style.transitionDelay = `${(index % 3) * 120}ms`;
-      revealObserver.observe(el);
-    });
-
-    // ================= 15. STATS ANIMATED NUMBER COUNTERS =================
-    let countersAnimated = false;
-    const statsObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !countersAnimated) {
-          countersAnimated = true;
-          document.querySelectorAll('.counter-number').forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-target'), 10);
-            let current = 0;
-            const step = Math.max(Math.ceil(target / 40), 1);
-            const timer = setInterval(() => {
-              current += step;
-              if (current >= target) {
-                counter.textContent = target;
-                clearInterval(timer);
-              } else {
-                counter.textContent = current;
-              }
-            }, 30);
-          });
-        }
-      });
-    }, { threshold: 0.3 });
-
-    const heroSection = document.getElementById('hero');
-    if (heroSection) statsObserver.observe(heroSection);
-
-    // ================= 16. INTERACTIVE PROJECT DETAIL MODAL =================
-    const projectsData = {
-      ruangtenang: {
-        title: "RuangTenang Kampus",
-        subtitle: "Production-Ready Full-Stack Web & AI Mental Health Platform • 2026",
-        icon: "message-square-heart",
-        tags: ["React 19", "TypeScript", "Tailwind CSS", "Gemini API (@google/genai)", "AES-256-GCM", "Prisma ORM", "Express.js", "PostgreSQL"],
-        overview: "Platform kesehatan mental dan konseling mahasiswa berkinerja tinggi yang dirancang dengan standar arsitektur industri dan kepatuhan privasi yang ketat.",
-        highlights: [
-          "<strong>Asisten AI CBT Reflektif:</strong> Didukung Gemini API via server-side proxy dengan SSE streaming untuk respons empatik tanpa latensi.",
-          "<strong>Arsitektur Privacy by Design:</strong> Scrubbing otomatis data pribadi sensitif (PII), deteksi krisis multi-lapis dengan negation handling, dan enkripsi database AES-256-GCM.",
-          "<strong>Penjadwalan Konseling Real-time:</strong> Transaksi database ACID anti double-booking dengan konversi otomatis 3 zona waktu (WIB, WITA, WIT).",
-          "<strong>Skrining Klinis Tervalidasi:</strong> Instrumen PHQ-9 (Depresi) & GAD-7 (Kecemasan) dengan pemicu darurat otomatis untuk situasi berisiko."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/RuangTenang"
-      },
-      impactgrid: {
-        title: "ImpactGrid — AI Sustainability DSS",
-        subtitle: "Ketua Tim (Awakening Reborn) • TDC Summit Fest 2026 (Studi Kasus Telkomsel)",
-        icon: "leaf",
-        tags: ["Decision Support System (DSS)", "AI Optimization", "ESG Analytics", "Financial Modeling", "Telkomsel Case"],
-        overview: "Sistem pendukung keputusan berbasis AI guna mengoptimalkan investasi efisiensi energi jaringan telekomunikasi (BTS/RAN) Telkomsel untuk memitigasi 63,6% emisi Scope 2.",
-        highlights: [
-          "<strong>4 Pilar Solusi Strategis:</strong> Network Data Hub (agregasi energi & trafik), Scenario Lab (simulasi intervensi efisiensi energi), Investment Prioritizer (prioritas CAPEX/OPEX), dan ESG Impact Verification (jejak audit ESG).",
-          "<strong>Evaluasi Multi-Parameter:</strong> Menyeimbangkan rasio kWh/TB, reduksi emisi CO2e, dan kepatuhan batas minimum Quality of Service (QoS).",
-          "<strong>Pemodelan Finansial Mendalam:</strong> Perhitungan Net Present Value (NPV), payback period, dan net cost per ton CO2e reduced.",
-          "<strong>Roadmap Pilot:</strong> Perancangan implementasi bertahap pada 120 lokasi site-equivalent."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/impactgrid-prototype"
-      },
-      sikaya: {
-        title: "SiKaya — Multi-Asset Finance Education",
-        subtitle: "Investment Technology & Product Concept",
-        icon: "line-chart",
-        tags: ["Fintech", "Portfolio Tracking", "Data Analytics", "UI/UX Prototyping"],
-        overview: "Platform edukasi investasi terintegrasi untuk instrumen saham, cryptocurrency, obligasi, dan emas guna meningkatkan literasi finansial generasi muda.",
-        highlights: [
-          "<strong>Simulasi Portofolio Dinamis:</strong> Visualisasi alokasi aset dan profil risiko pengguna.",
-          "<strong>Riset Pengguna Berkelanjutan:</strong> Merancang user flow yang ramah bagi investor pemula.",
-          "<strong>Interaksi Desain Modern:</strong> Dibuat dengan fondasi sistem desain modular dan responsif."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/SiKaya"
-      }
-    };
-
-    const projectModal = document.getElementById('projectModal');
-    const projectModalContent = document.getElementById('projectModalContent');
-
-    function openProjectModal(id) {
-      const data = projectsData[id];
-      if (!data) return;
-
-      document.getElementById('modalProjectTitle').textContent = data.title;
-      document.getElementById('modalProjectSubtitle').textContent = data.subtitle;
-
-      let tagsHtml = data.tags.map(t => `<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400">${t}</span>`).join('');
-      let highlightsHtml = data.highlights.map(h => `<li class="flex items-start gap-2.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i><span>${h}</span></li>`).join('');
-
-      document.getElementById('modalProjectBody').innerHTML = `
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Ikhtisar Solusi</h4>
-          <p class="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-200">${data.overview}</p>
-        </div>
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Fitur Utama & Arsitektur</h4>
-          <ul class="space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">${highlightsHtml}</ul>
-        </div>
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Teknologi & Framework</h4>
-          <div class="flex flex-wrap gap-1.5">${tagsHtml}</div>
-        </div>
-      `;
-
-      document.getElementById('modalProjectActions').innerHTML = `
-        <a href="${data.github}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-200 text-white dark:text-slate-900 font-bold text-xs transition-all shadow-md">
-          <i data-lucide="github" class="w-4 h-4"></i>
-          <span>Kunjungi Repositori GitHub</span>
-        </a>
-      `;
-
-      projectModal.classList.remove('hidden');
-      setTimeout(() => {
-        projectModal.classList.remove('opacity-0');
-        projectModalContent.classList.remove('scale-95');
-        projectModalContent.classList.add('scale-100');
-        lucide.createIcons();
-      }, 10);
-      playClickSound(650, 0.05);
-    }
-
-    function closeProjectModal() {
-      projectModal.classList.add('opacity-0');
-      projectModalContent.classList.remove('scale-100');
-      projectModalContent.classList.add('scale-95');
-      setTimeout(() => {
-        projectModal.classList.add('hidden');
-      }, 300);
-    }
-
-    projectModal?.addEventListener('click', (e) => {
-      if (e.target === projectModal) closeProjectModal();
-    });
-
-    // ================= 17. IN-PAGE CERTIFICATE QUICK VIEWER MODAL =================
-    const certModal = document.getElementById('certModal');
-    const certModalContent = document.getElementById('certModalContent');
-    const modalCertFrame = document.getElementById('modalCertFrame');
-    const modalCertImg = document.getElementById('modalCertImg');
-
-    function openCertModal(title, issuer, filePath) {
-      document.getElementById('modalCertTitle').textContent = title;
-      document.getElementById('modalCertIssuer').textContent = issuer;
-      document.getElementById('modalCertDownloadBtn').href = filePath;
-      document.getElementById('modalCertExternalBtn').href = filePath;
-
-      if (filePath.endsWith('.pdf')) {
-        modalCertFrame.src = filePath;
-        modalCertFrame.classList.remove('hidden');
-        modalCertImg.classList.add('hidden');
-      } else {
-        modalCertImg.src = filePath;
-        modalCertImg.classList.remove('hidden');
-        modalCertFrame.classList.add('hidden');
-      }
-
-      certModal.classList.remove('hidden');
-      setTimeout(() => {
-        certModal.classList.remove('opacity-0');
-        certModalContent.classList.remove('scale-95');
-        certModalContent.classList.add('scale-100');
-        lucide.createIcons();
-      }, 10);
-      playClickSound(700, 0.05);
-    }
-
-    function closeCertModal() {
-      certModal.classList.add('opacity-0');
-      certModalContent.classList.remove('scale-100');
-      certModalContent.classList.add('scale-95');
-      setTimeout(() => {
-        certModal.classList.add('hidden');
-        modalCertFrame.src = '';
-        modalCertImg.src = '';
-      }, 300);
-    }
-
-    certModal?.addEventListener('click', (e) => {
-      if (e.target === certModal) closeCertModal();
-    });
-
-    // Intercept certificate links to open in modal smoothly
-    document.querySelectorAll('a[href^="certificates/"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        const card = link.closest('.cert-card, .p-6, .mb-10');
-        const title = card ? (card.querySelector('h3, h4')?.textContent || 'Sertifikat Resmi') : 'Sertifikat Resmi';
-        const issuer = card ? (card.querySelector('p')?.textContent || 'Dokumen Terverifikasi') : 'Dokumen Terverifikasi';
-        
-        // Open modal
-        e.preventDefault();
-        openCertModal(title.trim(), issuer.trim(), href);
-      });
-    });
-
-    // ================= 18. DEVELOPER TERMINAL CLI CONTROLLER =================
-    const terminalModal = document.getElementById('terminalModal');
-    const terminalOutput = document.getElementById('terminalOutput');
-    const terminalInput = document.getElementById('terminalInput');
-
-    function toggleTerminalModal() {
-      if (terminalModal.classList.contains('hidden')) {
-        terminalModal.classList.remove('hidden');
-        setTimeout(() => {
-          terminalModal.classList.remove('opacity-0');
-          terminalModal.querySelector('div').classList.remove('scale-95');
-          terminalModal.querySelector('div').classList.add('scale-100');
-          terminalInput.focus();
-        }, 10);
-        playClickSound(900, 0.05);
-      } else {
-        terminalModal.classList.add('opacity-0');
-        terminalModal.querySelector('div').classList.remove('scale-100');
-        terminalModal.querySelector('div').classList.add('scale-95');
-        setTimeout(() => {
-          terminalModal.classList.add('hidden');
-        }, 300);
-      }
-    }
-
-    const commandHistory = [];
-    let historyIndex = -1;
-
-    terminalInput?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const cmd = terminalInput.value.trim();
-        if (cmd) {
-          commandHistory.push(cmd);
-          historyIndex = commandHistory.length;
-          executeTerminalCommand(cmd);
-          terminalInput.value = '';
-        }
-      } else if (e.key === 'ArrowUp') {
-        if (historyIndex > 0) {
-          historyIndex--;
-          terminalInput.value = commandHistory[historyIndex];
-        }
-      } else if (e.key === 'ArrowDown') {
-        if (historyIndex < commandHistory.length - 1) {
-          historyIndex++;
-          terminalInput.value = commandHistory[historyIndex];
-        } else {
-          historyIndex = commandHistory.length;
-          terminalInput.value = '';
-        }
-      }
-    });
-
-    function executeTerminalCommand(cmd) {
-      const line = document.createElement('div');
-      line.innerHTML = `<span class="text-emerald-400 font-bold">zaki@dev:~$</span> <span>${escapeHtml(cmd)}</span>`;
-      terminalOutput.appendChild(line);
-
-      const normalized = cmd.toLowerCase().trim();
-      const response = document.createElement('div');
-      response.className = 'text-slate-300 leading-relaxed';
-
-      switch (normalized) {
-        case 'help':
-          response.innerHTML = `
-            <div class="text-amber-400 font-bold mb-1">Daftar Perintah yang Tersedia:</div>
-            <div>• <strong class="text-cyan-400">about</strong>    : Ringkasan profil Zaki Irsyada Putra</div>
-            <div>• <strong class="text-cyan-400">skills</strong>   : Menampilkan daftar teknologi & AI toolkit</div>
-            <div>• <strong class="text-cyan-400">projects</strong> : Proyek unggulan (RuangTenang, ImpactGrid, dll)</div>
-            <div>• <strong class="text-cyan-400">awards</strong>   : Prestasi kejuaraan (Juara 1 INSIGHT, dll)</div>
-            <div>• <strong class="text-cyan-400">certs</strong>    : Sertifikasi Komdigi & Microsoft</div>
-            <div>• <strong class="text-cyan-400">contact</strong>  : Info kontak & WhatsApp</div>
-            <div>• <strong class="text-cyan-400">sudo hire</strong>: Khusus recruiter yang ingin merekrut! 🚀</div>
-            <div>• <strong class="text-cyan-400">clear</strong>    : Membersihkan layar terminal</div>
-          `;
-          break;
-
-        case 'about':
-          response.innerHTML = `
-            <div class="text-brand-300 font-bold">Zaki Irsyada Putra</div>
-            <div>Mahasiswa S1 Sistem Informasi di Telkom University Surabaya.</div>
-            <div>Fokus: Software & AI Engineering, Full-Stack Web (React 19, TS), Privacy by Design, dan Data Science.</div>
-          `;
-          break;
-
-        case 'skills':
-          response.innerHTML = `
-            <div class="text-emerald-400 font-bold mb-1">⚙️ Technical Stack:</div>
-            <div>• Web: React 19, TypeScript, JavaScript, Tailwind CSS, Express.js, Prisma ORM, Node.js</div>
-            <div>• AI: Gemini API, Prompt Engineering, SSE Streaming, Scikit-Learn, Pandas, NumPy</div>
-            <div>• Security: AES-256-GCM, PII Scrubbing, RBAC, Zod Validation</div>
-            <div>• Cloud & Tools: Microsoft Azure, Microsoft Fabric, Git, PostgreSQL, SQLite</div>
-          `;
-          break;
-
-        case 'projects':
-          response.innerHTML = `
-            <div class="text-indigo-400 font-bold mb-1">🚀 Proyek Pilihan:</div>
-            <div>1. <strong class="text-white">RuangTenang Kampus</strong> : Platform AI CBT Mental Health (Production-Ready)</div>
-            <div>2. <strong class="text-white">ImpactGrid</strong> : AI Network Sustainability DSS (Telkomsel Case)</div>
-            <div>3. <strong class="text-white">SiKaya</strong> : Platform Edukasi Investasi Multi-Aset</div>
-            <div>4. <strong class="text-white">OmniTRAF</strong> : Intelligent Telemetry Dashboard</div>
-            <div class="mt-1 text-slate-400">Ketik 'projects' di web atau klik kartu untuk detail lengkap.</div>
-          `;
-          break;
-
-        case 'awards':
-          response.innerHTML = `
-            <div class="text-amber-400 font-bold mb-1">🏆 Prestasi & Kejuaraan:</div>
-            <div>• 🥇 <strong class="text-white">Juara 1 Nasional</strong> - Business Case Competition INSIGHT 2025 (Telkom University Surabaya)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - YED UI 2025 Business Plan Competition (Universitas Indonesia)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - DIGITOPIA FAIR 4.0 2026 (Telkom University Surabaya)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - IMAGEPRENEUR 2025 (Universitas Pendidikan Indonesia)</div>
-          `;
-          break;
-
-        case 'certs':
-          response.innerHTML = `
-            <div class="text-purple-400 font-bold mb-1">📜 Kredensial Resmi:</div>
-            <div>• Associate Data Scientist + Python (Komdigi • 31 Jam)</div>
-            <div>• Data Scientist Supervisor (Komdigi • 20 Jam)</div>
-            <div>• Microsoft Fabric & Azure Fundamentals (Komdigi & Microsoft • 17 Jam)</div>
-            <div>• Belajar Dasar AI (Dicoding • ID: GRX5JWY9KX0M)</div>
-            <div>• Dasar-dasar Keamanan AI (Komdigi & Microsoft)</div>
-            <div>• Ethical Hacker For Dummies & Cyber Security Awareness (Komdigi)</div>
-          `;
-          break;
-
-        case 'contact':
-          response.innerHTML = `
-            <div class="text-cyan-400 font-bold mb-1">📬 Kontak Zaki:</div>
-            <div>• Email: <a href="mailto:irsyadazaki77@gmail.com" class="text-brand-300 underline">irsyadazaki77@gmail.com</a></div>
-            <div>• WhatsApp: <a href="https://wa.me/6282198069550" target="_blank" class="text-emerald-400 underline">+62 821-9806-9550</a></div>
-            <div>• GitHub: <a href="https://github.com/irsyadazaki77-beep" target="_blank" class="text-blue-400 underline">github.com/irsyadazaki77-beep</a></div>
-          `;
-          break;
-
-        case 'sudo hire':
-        case 'sudo hire-zaki':
-        case 'hire':
-          response.innerHTML = `
-            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
-              🎉 ACCESS GRANTED! Penawaran kerja diterima dengan antusiasme tinggi!
-              <div class="text-xs font-normal text-white mt-1">Zaki Irsyada Putra siap berkontribusi optimal pada tim Anda. Mari jadwalkan sesi wawancara via WhatsApp atau Email! 🚀</div>
-            </div>
-          `;
-          playClickSound(880, 0.1);
-          break;
-
-        case 'clear':
-          terminalOutput.innerHTML = '';
-          return;
-
-        case 'date':
-          response.textContent = new Date().toString();
-          break;
-
-        default:
-          if (normalized.startsWith('echo ')) {
-            response.textContent = cmd.substring(5);
-          } else {
-            response.innerHTML = `<span class="text-rose-400">Command not found: "${escapeHtml(cmd)}".</span> Ketik <span class="text-amber-400 font-bold">help</span> untuk daftar perintah.`;
-          }
-          break;
-      }
-
-      terminalOutput.appendChild(response);
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
-      playClickSound(450, 0.03);
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // Universal ESC Key to close any active modal
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeProjectModal();
-        closeCertModal();
-        if (!terminalModal.classList.contains('hidden')) {
-          toggleTerminalModal();
-        }
-      }
-    });
-
-  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest">
-    // 9. Certificate Filtering Logic
-    const certFilterButtons = document.querySelectorAll('.cert-filter-btn');
-    const certCards = document.querySelectorAll('.cert-card');
-
-    certFilterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        certFilterButtons.forEach(b => {
-          b.classList.remove('active', 'bg-brand-600', 'text-white');
-          b.classList.add('text-slate-600', 'dark:text-slate-300');
-        });
-
-        btn.classList.add('active', 'bg-brand-600', 'text-white');
-        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
-
-        const filterValue = btn.getAttribute('data-cert-filter');
-
-        certCards.forEach(card => {
-          const category = card.getAttribute('data-category');
-          if (filterValue === 'all' || category === filterValue) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
-
-  
-    // ================= 10. INTERACTIVE AUDIO SYNTHESIZER =================
-    let audioCtx = null;
-    let isSoundEnabled = false;
-    const soundToggleBtn = document.getElementById('soundToggleBtn');
-    const soundOnIcon = document.getElementById('soundOnIcon');
-    const soundOffIcon = document.getElementById('soundOffIcon');
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
-
-    function playClickSound(freq = 600, duration = 0.04) {
-      if (!isSoundEnabled) return;
-      try {
-        initAudio();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {}
-    }
-
-    soundToggleBtn?.addEventListener('click', () => {
-      isSoundEnabled = !isSoundEnabled;
-      if (isSoundEnabled) {
-        initAudio();
-        soundOnIcon?.classList.remove('hidden');
-        soundOffIcon?.classList.add('hidden');
-        playClickSound(800, 0.06);
-        showToast('🔊 Efek suara interaktif diaktifkan');
-      } else {
-        soundOnIcon?.classList.add('hidden');
-        soundOffIcon?.classList.remove('hidden');
-        showToast('🔇 Efek suara dinonaktifkan');
-      }
-    });
-
-    document.querySelectorAll('button, a, .filter-btn, .cert-filter-btn').forEach(el => {
-      el.addEventListener('mouseenter', () => playClickSound(300, 0.02));
-      el.addEventListener('click', () => playClickSound(550, 0.04));
-    });
-
-    // ================= 11. SCROLL READING PROGRESS BAR =================
-    const scrollProgressBar = document.getElementById('scrollProgressBar');
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      if (scrollProgressBar) {
-        scrollProgressBar.style.width = scrollPercent + '%';
-      }
-    });
-
-    // ================= 12. HERO INTERACTIVE PARTICLE CANVAS =================
-    const canvas = document.getElementById('heroParticles');
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      let particles = [];
-      let width = canvas.width = canvas.parentElement.offsetWidth;
-      let height = canvas.height = canvas.parentElement.offsetHeight;
-      let mouse = { x: null, y: null, radius: 120 };
-
-      window.addEventListener('resize', () => {
-        if (!canvas.parentElement) return;
-        width = canvas.width = canvas.parentElement.offsetWidth;
-        height = canvas.height = canvas.parentElement.offsetHeight;
-        initParticles();
-      });
-
-      canvas.parentElement.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-      });
-
-      canvas.parentElement.addEventListener('mouseleave', () => {
-        mouse.x = null;
-        mouse.y = null;
-      });
-
-      class Particle {
-        constructor() {
-          this.x = Math.random() * width;
-          this.y = Math.random() * height;
-          this.size = Math.random() * 2 + 1;
-          this.baseX = this.x;
-          this.baseY = this.y;
-          this.density = (Math.random() * 20) + 5;
-          this.vx = (Math.random() - 0.5) * 0.8;
-          this.vy = (Math.random() - 0.5) * 0.8;
-        }
-
-        draw() {
-          ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(165, 180, 252, 0.5)' : 'rgba(99, 102, 241, 0.4)';
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.closePath();
-          ctx.fill();
-        }
-
-        update() {
-          this.x += this.vx;
-          this.y += this.vy;
-
-          if (this.x < 0 || this.x > width) this.vx *= -1;
-          if (this.y < 0 || this.y > height) this.vy *= -1;
-
-          if (mouse.x != null && mouse.y != null) {
-            let dx = mouse.x - this.x;
-            let dy = mouse.y - this.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < mouse.radius) {
-              let force = (mouse.radius - distance) / mouse.radius;
-              let directionX = (dx / distance) * force * this.density * 0.5;
-              let directionY = (dy / distance) * force * this.density * 0.5;
-              this.x += directionX;
-              this.y += directionY;
-            }
-          }
-        }
-      }
-
-      function initParticles() {
-        particles = [];
-        const count = Math.min(Math.floor((width * height) / 14000), 75);
-        for (let i = 0; i < count; i++) {
-          particles.push(new Particle());
-        }
-      }
-
-      function connectParticles() {
-        for (let a = 0; a < particles.length; a++) {
-          for (let b = a + 1; b < particles.length; b++) {
-            let dx = particles[a].x - particles[b].x;
-            let dy = particles[a].y - particles[b].y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 100) {
-              let opacity = 1 - (dist / 100);
-              ctx.strokeStyle = document.documentElement.classList.contains('dark') ? `rgba(129, 140, 248, ${opacity * 0.15})` : `rgba(99, 102, 241, ${opacity * 0.12})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(particles[a].x, particles[a].y);
-              ctx.lineTo(particles[b].x, particles[b].y);
-              ctx.stroke();
-            }
-          }
-        }
-      }
-
-      function animateParticles() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-          p.update();
-          p.draw();
-        });
-        connectParticles();
-        requestAnimationFrame(animateParticles);
-      }
-
-      initParticles();
-      animateParticles();
-    }
-
-    // ================= 13. SPOTLIGHT HOVER & 3D TILT EFFECT =================
-    document.querySelectorAll('.spotlight-card').forEach(card => {
-      card.addEventListener('pointermove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-
-        if (card.classList.contains('tilt-card') && window.innerWidth > 768) {
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -5;
-          const rotateY = ((x - centerX) / centerX) * 5;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
-        }
-      });
-
-      card.addEventListener('pointerleave', () => {
-        if (card.classList.contains('tilt-card')) {
-          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        }
-      });
-    });
-
-    // ================= 14. SCROLL REVEAL & STAGGER ANIMATIONS =================
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('reveal-visible');
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.reveal-on-scroll').forEach((el, index) => {
-      el.style.transitionDelay = `${(index % 3) * 120}ms`;
-      revealObserver.observe(el);
-    });
-
-    // ================= 15. STATS ANIMATED NUMBER COUNTERS =================
-    let countersAnimated = false;
-    const statsObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !countersAnimated) {
-          countersAnimated = true;
-          document.querySelectorAll('.counter-number').forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-target'), 10);
-            let current = 0;
-            const step = Math.max(Math.ceil(target / 40), 1);
-            const timer = setInterval(() => {
-              current += step;
-              if (current >= target) {
-                counter.textContent = target;
-                clearInterval(timer);
-              } else {
-                counter.textContent = current;
-              }
-            }, 30);
-          });
-        }
-      });
-    }, { threshold: 0.3 });
-
-    const heroSection = document.getElementById('hero');
-    if (heroSection) statsObserver.observe(heroSection);
-
-    // ================= 16. INTERACTIVE PROJECT DETAIL MODAL =================
-    const projectsData = {
-      ruangtenang: {
-        title: "RuangTenang Kampus",
-        subtitle: "Production-Ready Full-Stack Web & AI Mental Health Platform • 2026",
-        icon: "message-square-heart",
-        tags: ["React 19", "TypeScript", "Tailwind CSS", "Gemini API (@google/genai)", "AES-256-GCM", "Prisma ORM", "Express.js", "PostgreSQL"],
-        overview: "Platform kesehatan mental dan konseling mahasiswa berkinerja tinggi yang dirancang dengan standar arsitektur industri dan kepatuhan privasi yang ketat.",
-        highlights: [
-          "<strong>Asisten AI CBT Reflektif:</strong> Didukung Gemini API via server-side proxy dengan SSE streaming untuk respons empatik tanpa latensi.",
-          "<strong>Arsitektur Privacy by Design:</strong> Scrubbing otomatis data pribadi sensitif (PII), deteksi krisis multi-lapis dengan negation handling, dan enkripsi database AES-256-GCM.",
-          "<strong>Penjadwalan Konseling Real-time:</strong> Transaksi database ACID anti double-booking dengan konversi otomatis 3 zona waktu (WIB, WITA, WIT).",
-          "<strong>Skrining Klinis Tervalidasi:</strong> Instrumen PHQ-9 (Depresi) & GAD-7 (Kecemasan) dengan pemicu darurat otomatis untuk situasi berisiko."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/RuangTenang"
-      },
-      impactgrid: {
-        title: "ImpactGrid — AI Sustainability DSS",
-        subtitle: "Ketua Tim (Awakening Reborn) • TDC Summit Fest 2026 (Studi Kasus Telkomsel)",
-        icon: "leaf",
-        tags: ["Decision Support System (DSS)", "AI Optimization", "ESG Analytics", "Financial Modeling", "Telkomsel Case"],
-        overview: "Sistem pendukung keputusan berbasis AI guna mengoptimalkan investasi efisiensi energi jaringan telekomunikasi (BTS/RAN) Telkomsel untuk memitigasi 63,6% emisi Scope 2.",
-        highlights: [
-          "<strong>4 Pilar Solusi Strategis:</strong> Network Data Hub (agregasi energi & trafik), Scenario Lab (simulasi intervensi efisiensi energi), Investment Prioritizer (prioritas CAPEX/OPEX), dan ESG Impact Verification (jejak audit ESG).",
-          "<strong>Evaluasi Multi-Parameter:</strong> Menyeimbangkan rasio kWh/TB, reduksi emisi CO2e, dan kepatuhan batas minimum Quality of Service (QoS).",
-          "<strong>Pemodelan Finansial Mendalam:</strong> Perhitungan Net Present Value (NPV), payback period, dan net cost per ton CO2e reduced.",
-          "<strong>Roadmap Pilot:</strong> Perancangan implementasi bertahap pada 120 lokasi site-equivalent."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/impactgrid-prototype"
-      },
-      sikaya: {
-        title: "SiKaya — Multi-Asset Finance Education",
-        subtitle: "Investment Technology & Product Concept",
-        icon: "line-chart",
-        tags: ["Fintech", "Portfolio Tracking", "Data Analytics", "UI/UX Prototyping"],
-        overview: "Platform edukasi investasi terintegrasi untuk instrumen saham, cryptocurrency, obligasi, dan emas guna meningkatkan literasi finansial generasi muda.",
-        highlights: [
-          "<strong>Simulasi Portofolio Dinamis:</strong> Visualisasi alokasi aset dan profil risiko pengguna.",
-          "<strong>Riset Pengguna Berkelanjutan:</strong> Merancang user flow yang ramah bagi investor pemula.",
-          "<strong>Interaksi Desain Modern:</strong> Dibuat dengan fondasi sistem desain modular dan responsif."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/SiKaya"
-      }
-    };
-
-    const projectModal = document.getElementById('projectModal');
-    const projectModalContent = document.getElementById('projectModalContent');
-
-    function openProjectModal(id) {
-      const data = projectsData[id];
-      if (!data) return;
-
-      document.getElementById('modalProjectTitle').textContent = data.title;
-      document.getElementById('modalProjectSubtitle').textContent = data.subtitle;
-
-      let tagsHtml = data.tags.map(t => `<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400">${t}</span>`).join('');
-      let highlightsHtml = data.highlights.map(h => `<li class="flex items-start gap-2.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i><span>${h}</span></li>`).join('');
-
-      document.getElementById('modalProjectBody').innerHTML = `
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Ikhtisar Solusi</h4>
-          <p class="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-200">${data.overview}</p>
-        </div>
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Fitur Utama & Arsitektur</h4>
-          <ul class="space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">${highlightsHtml}</ul>
-        </div>
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Teknologi & Framework</h4>
-          <div class="flex flex-wrap gap-1.5">${tagsHtml}</div>
-        </div>
-      `;
-
-      document.getElementById('modalProjectActions').innerHTML = `
-        <a href="${data.github}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-200 text-white dark:text-slate-900 font-bold text-xs transition-all shadow-md">
-          <i data-lucide="github" class="w-4 h-4"></i>
-          <span>Kunjungi Repositori GitHub</span>
-        </a>
-      `;
-
-      projectModal.classList.remove('hidden');
-      setTimeout(() => {
-        projectModal.classList.remove('opacity-0');
-        projectModalContent.classList.remove('scale-95');
-        projectModalContent.classList.add('scale-100');
-        lucide.createIcons();
-      }, 10);
-      playClickSound(650, 0.05);
-    }
-
-    function closeProjectModal() {
-      projectModal.classList.add('opacity-0');
-      projectModalContent.classList.remove('scale-100');
-      projectModalContent.classList.add('scale-95');
-      setTimeout(() => {
-        projectModal.classList.add('hidden');
-      }, 300);
-    }
-
-    projectModal?.addEventListener('click', (e) => {
-      if (e.target === projectModal) closeProjectModal();
-    });
-
-    // ================= 17. IN-PAGE CERTIFICATE QUICK VIEWER MODAL =================
-    const certModal = document.getElementById('certModal');
-    const certModalContent = document.getElementById('certModalContent');
-    const modalCertFrame = document.getElementById('modalCertFrame');
-    const modalCertImg = document.getElementById('modalCertImg');
-
-    function openCertModal(title, issuer, filePath) {
-      document.getElementById('modalCertTitle').textContent = title;
-      document.getElementById('modalCertIssuer').textContent = issuer;
-      document.getElementById('modalCertDownloadBtn').href = filePath;
-      document.getElementById('modalCertExternalBtn').href = filePath;
-
-      if (filePath.endsWith('.pdf')) {
-        modalCertFrame.src = filePath;
-        modalCertFrame.classList.remove('hidden');
-        modalCertImg.classList.add('hidden');
-      } else {
-        modalCertImg.src = filePath;
-        modalCertImg.classList.remove('hidden');
-        modalCertFrame.classList.add('hidden');
-      }
-
-      certModal.classList.remove('hidden');
-      setTimeout(() => {
-        certModal.classList.remove('opacity-0');
-        certModalContent.classList.remove('scale-95');
-        certModalContent.classList.add('scale-100');
-        lucide.createIcons();
-      }, 10);
-      playClickSound(700, 0.05);
-    }
-
-    function closeCertModal() {
-      certModal.classList.add('opacity-0');
-      certModalContent.classList.remove('scale-100');
-      certModalContent.classList.add('scale-95');
-      setTimeout(() => {
-        certModal.classList.add('hidden');
-        modalCertFrame.src = '';
-        modalCertImg.src = '';
-      }, 300);
-    }
-
-    certModal?.addEventListener('click', (e) => {
-      if (e.target === certModal) closeCertModal();
-    });
-
-    // Intercept certificate links to open in modal smoothly
-    document.querySelectorAll('a[href^="certificates/"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        const card = link.closest('.cert-card, .p-6, .mb-10');
-        const title = card ? (card.querySelector('h3, h4')?.textContent || 'Sertifikat Resmi') : 'Sertifikat Resmi';
-        const issuer = card ? (card.querySelector('p')?.textContent || 'Dokumen Terverifikasi') : 'Dokumen Terverifikasi';
-        
-        // Open modal
-        e.preventDefault();
-        openCertModal(title.trim(), issuer.trim(), href);
-      });
-    });
-
-    // ================= 18. DEVELOPER TERMINAL CLI CONTROLLER =================
-    const terminalModal = document.getElementById('terminalModal');
-    const terminalOutput = document.getElementById('terminalOutput');
-    const terminalInput = document.getElementById('terminalInput');
-
-    function toggleTerminalModal() {
-      if (terminalModal.classList.contains('hidden')) {
-        terminalModal.classList.remove('hidden');
-        setTimeout(() => {
-          terminalModal.classList.remove('opacity-0');
-          terminalModal.querySelector('div').classList.remove('scale-95');
-          terminalModal.querySelector('div').classList.add('scale-100');
-          terminalInput.focus();
-        }, 10);
-        playClickSound(900, 0.05);
-      } else {
-        terminalModal.classList.add('opacity-0');
-        terminalModal.querySelector('div').classList.remove('scale-100');
-        terminalModal.querySelector('div').classList.add('scale-95');
-        setTimeout(() => {
-          terminalModal.classList.add('hidden');
-        }, 300);
-      }
-    }
-
-    const commandHistory = [];
-    let historyIndex = -1;
-
-    terminalInput?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const cmd = terminalInput.value.trim();
-        if (cmd) {
-          commandHistory.push(cmd);
-          historyIndex = commandHistory.length;
-          executeTerminalCommand(cmd);
-          terminalInput.value = '';
-        }
-      } else if (e.key === 'ArrowUp') {
-        if (historyIndex > 0) {
-          historyIndex--;
-          terminalInput.value = commandHistory[historyIndex];
-        }
-      } else if (e.key === 'ArrowDown') {
-        if (historyIndex < commandHistory.length - 1) {
-          historyIndex++;
-          terminalInput.value = commandHistory[historyIndex];
-        } else {
-          historyIndex = commandHistory.length;
-          terminalInput.value = '';
-        }
-      }
-    });
-
-    function executeTerminalCommand(cmd) {
-      const line = document.createElement('div');
-      line.innerHTML = `<span class="text-emerald-400 font-bold">zaki@dev:~$</span> <span>${escapeHtml(cmd)}</span>`;
-      terminalOutput.appendChild(line);
-
-      const normalized = cmd.toLowerCase().trim();
-      const response = document.createElement('div');
-      response.className = 'text-slate-300 leading-relaxed';
-
-      switch (normalized) {
-        case 'help':
-          response.innerHTML = `
-            <div class="text-amber-400 font-bold mb-1">Daftar Perintah yang Tersedia:</div>
-            <div>• <strong class="text-cyan-400">about</strong>    : Ringkasan profil Zaki Irsyada Putra</div>
-            <div>• <strong class="text-cyan-400">skills</strong>   : Menampilkan daftar teknologi & AI toolkit</div>
-            <div>• <strong class="text-cyan-400">projects</strong> : Proyek unggulan (RuangTenang, ImpactGrid, dll)</div>
-            <div>• <strong class="text-cyan-400">awards</strong>   : Prestasi kejuaraan (Juara 1 INSIGHT, dll)</div>
-            <div>• <strong class="text-cyan-400">certs</strong>    : Sertifikasi Komdigi & Microsoft</div>
-            <div>• <strong class="text-cyan-400">contact</strong>  : Info kontak & WhatsApp</div>
-            <div>• <strong class="text-cyan-400">sudo hire</strong>: Khusus recruiter yang ingin merekrut! 🚀</div>
-            <div>• <strong class="text-cyan-400">clear</strong>    : Membersihkan layar terminal</div>
-          `;
-          break;
-
-        case 'about':
-          response.innerHTML = `
-            <div class="text-brand-300 font-bold">Zaki Irsyada Putra</div>
-            <div>Mahasiswa S1 Sistem Informasi di Telkom University Surabaya.</div>
-            <div>Fokus: Software & AI Engineering, Full-Stack Web (React 19, TS), Privacy by Design, dan Data Science.</div>
-          `;
-          break;
-
-        case 'skills':
-          response.innerHTML = `
-            <div class="text-emerald-400 font-bold mb-1">⚙️ Technical Stack:</div>
-            <div>• Web: React 19, TypeScript, JavaScript, Tailwind CSS, Express.js, Prisma ORM, Node.js</div>
-            <div>• AI: Gemini API, Prompt Engineering, SSE Streaming, Scikit-Learn, Pandas, NumPy</div>
-            <div>• Security: AES-256-GCM, PII Scrubbing, RBAC, Zod Validation</div>
-            <div>• Cloud & Tools: Microsoft Azure, Microsoft Fabric, Git, PostgreSQL, SQLite</div>
-          `;
-          break;
-
-        case 'projects':
-          response.innerHTML = `
-            <div class="text-indigo-400 font-bold mb-1">🚀 Proyek Pilihan:</div>
-            <div>1. <strong class="text-white">RuangTenang Kampus</strong> : Platform AI CBT Mental Health (Production-Ready)</div>
-            <div>2. <strong class="text-white">ImpactGrid</strong> : AI Network Sustainability DSS (Telkomsel Case)</div>
-            <div>3. <strong class="text-white">SiKaya</strong> : Platform Edukasi Investasi Multi-Aset</div>
-            <div>4. <strong class="text-white">OmniTRAF</strong> : Intelligent Telemetry Dashboard</div>
-            <div class="mt-1 text-slate-400">Ketik 'projects' di web atau klik kartu untuk detail lengkap.</div>
-          `;
-          break;
-
-        case 'awards':
-          response.innerHTML = `
-            <div class="text-amber-400 font-bold mb-1">🏆 Prestasi & Kejuaraan:</div>
-            <div>• 🥇 <strong class="text-white">Juara 1 Nasional</strong> - Business Case Competition INSIGHT 2025 (Telkom University Surabaya)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - YED UI 2025 Business Plan Competition (Universitas Indonesia)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - DIGITOPIA FAIR 4.0 2026 (Telkom University Surabaya)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - IMAGEPRENEUR 2025 (Universitas Pendidikan Indonesia)</div>
-          `;
-          break;
-
-        case 'certs':
-          response.innerHTML = `
-            <div class="text-purple-400 font-bold mb-1">📜 Kredensial Resmi:</div>
-            <div>• Associate Data Scientist + Python (Komdigi • 31 Jam)</div>
-            <div>• Data Scientist Supervisor (Komdigi • 20 Jam)</div>
-            <div>• Microsoft Fabric & Azure Fundamentals (Komdigi & Microsoft • 17 Jam)</div>
-            <div>• Belajar Dasar AI (Dicoding • ID: GRX5JWY9KX0M)</div>
-            <div>• Dasar-dasar Keamanan AI (Komdigi & Microsoft)</div>
-            <div>• Ethical Hacker For Dummies & Cyber Security Awareness (Komdigi)</div>
-          `;
-          break;
-
-        case 'contact':
-          response.innerHTML = `
-            <div class="text-cyan-400 font-bold mb-1">📬 Kontak Zaki:</div>
-            <div>• Email: <a href="mailto:irsyadazaki77@gmail.com" class="text-brand-300 underline">irsyadazaki77@gmail.com</a></div>
-            <div>• WhatsApp: <a href="https://wa.me/6282198069550" target="_blank" class="text-emerald-400 underline">+62 821-9806-9550</a></div>
-            <div>• GitHub: <a href="https://github.com/irsyadazaki77-beep" target="_blank" class="text-blue-400 underline">github.com/irsyadazaki77-beep</a></div>
-          `;
-          break;
-
-        case 'sudo hire':
-        case 'sudo hire-zaki':
-        case 'hire':
-          response.innerHTML = `
-            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
-              🎉 ACCESS GRANTED! Penawaran kerja diterima dengan antusiasme tinggi!
-              <div class="text-xs font-normal text-white mt-1">Zaki Irsyada Putra siap berkontribusi optimal pada tim Anda. Mari jadwalkan sesi wawancara via WhatsApp atau Email! 🚀</div>
-            </div>
-          `;
-          playClickSound(880, 0.1);
-          break;
-
-        case 'clear':
-          terminalOutput.innerHTML = '';
-          return;
-
-        case 'date':
-          response.textContent = new Date().toString();
-          break;
-
-        default:
-          if (normalized.startsWith('echo ')) {
-            response.textContent = cmd.substring(5);
-          } else {
-            response.innerHTML = `<span class="text-rose-400">Command not found: "${escapeHtml(cmd)}".</span> Ketik <span class="text-amber-400 font-bold">help</span> untuk daftar perintah.`;
-          }
-          break;
-      }
-
-      terminalOutput.appendChild(response);
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
-      playClickSound(450, 0.03);
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // Universal ESC Key to close any active modal
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeProjectModal();
-        closeCertModal();
-        if (!terminalModal.classList.contains('hidden')) {
-          toggleTerminalModal();
-        }
-      }
-    });
-
-  </script>
-  <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Plus Jakarta Sans, Outfit & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -1315,625 +77,6 @@
         }
       }
     }
-  
-    // 9. Certificate Filtering Logic
-    const certFilterButtons = document.querySelectorAll('.cert-filter-btn');
-    const certCards = document.querySelectorAll('.cert-card');
-
-    certFilterButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        certFilterButtons.forEach(b => {
-          b.classList.remove('active', 'bg-brand-600', 'text-white');
-          b.classList.add('text-slate-600', 'dark:text-slate-300');
-        });
-
-        btn.classList.add('active', 'bg-brand-600', 'text-white');
-        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
-
-        const filterValue = btn.getAttribute('data-cert-filter');
-
-        certCards.forEach(card => {
-          const category = card.getAttribute('data-category');
-          if (filterValue === 'all' || category === filterValue) {
-            card.style.display = 'flex';
-          } else {
-            card.style.display = 'none';
-          }
-        });
-      });
-    });
-
-  
-    // ================= 10. INTERACTIVE AUDIO SYNTHESIZER =================
-    let audioCtx = null;
-    let isSoundEnabled = false;
-    const soundToggleBtn = document.getElementById('soundToggleBtn');
-    const soundOnIcon = document.getElementById('soundOnIcon');
-    const soundOffIcon = document.getElementById('soundOffIcon');
-
-    function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-    }
-
-    function playClickSound(freq = 600, duration = 0.04) {
-      if (!isSoundEnabled) return;
-      try {
-        initAudio();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {}
-    }
-
-    soundToggleBtn?.addEventListener('click', () => {
-      isSoundEnabled = !isSoundEnabled;
-      if (isSoundEnabled) {
-        initAudio();
-        soundOnIcon?.classList.remove('hidden');
-        soundOffIcon?.classList.add('hidden');
-        playClickSound(800, 0.06);
-        showToast('🔊 Efek suara interaktif diaktifkan');
-      } else {
-        soundOnIcon?.classList.add('hidden');
-        soundOffIcon?.classList.remove('hidden');
-        showToast('🔇 Efek suara dinonaktifkan');
-      }
-    });
-
-    document.querySelectorAll('button, a, .filter-btn, .cert-filter-btn').forEach(el => {
-      el.addEventListener('mouseenter', () => playClickSound(300, 0.02));
-      el.addEventListener('click', () => playClickSound(550, 0.04));
-    });
-
-    // ================= 11. SCROLL READING PROGRESS BAR =================
-    const scrollProgressBar = document.getElementById('scrollProgressBar');
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-      if (scrollProgressBar) {
-        scrollProgressBar.style.width = scrollPercent + '%';
-      }
-    });
-
-    // ================= 12. HERO INTERACTIVE PARTICLE CANVAS =================
-    const canvas = document.getElementById('heroParticles');
-    if (canvas) {
-      const ctx = canvas.getContext('2d');
-      let particles = [];
-      let width = canvas.width = canvas.parentElement.offsetWidth;
-      let height = canvas.height = canvas.parentElement.offsetHeight;
-      let mouse = { x: null, y: null, radius: 120 };
-
-      window.addEventListener('resize', () => {
-        if (!canvas.parentElement) return;
-        width = canvas.width = canvas.parentElement.offsetWidth;
-        height = canvas.height = canvas.parentElement.offsetHeight;
-        initParticles();
-      });
-
-      canvas.parentElement.addEventListener('mousemove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-      });
-
-      canvas.parentElement.addEventListener('mouseleave', () => {
-        mouse.x = null;
-        mouse.y = null;
-      });
-
-      class Particle {
-        constructor() {
-          this.x = Math.random() * width;
-          this.y = Math.random() * height;
-          this.size = Math.random() * 2 + 1;
-          this.baseX = this.x;
-          this.baseY = this.y;
-          this.density = (Math.random() * 20) + 5;
-          this.vx = (Math.random() - 0.5) * 0.8;
-          this.vy = (Math.random() - 0.5) * 0.8;
-        }
-
-        draw() {
-          ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(165, 180, 252, 0.5)' : 'rgba(99, 102, 241, 0.4)';
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-          ctx.closePath();
-          ctx.fill();
-        }
-
-        update() {
-          this.x += this.vx;
-          this.y += this.vy;
-
-          if (this.x < 0 || this.x > width) this.vx *= -1;
-          if (this.y < 0 || this.y > height) this.vy *= -1;
-
-          if (mouse.x != null && mouse.y != null) {
-            let dx = mouse.x - this.x;
-            let dy = mouse.y - this.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < mouse.radius) {
-              let force = (mouse.radius - distance) / mouse.radius;
-              let directionX = (dx / distance) * force * this.density * 0.5;
-              let directionY = (dy / distance) * force * this.density * 0.5;
-              this.x += directionX;
-              this.y += directionY;
-            }
-          }
-        }
-      }
-
-      function initParticles() {
-        particles = [];
-        const count = Math.min(Math.floor((width * height) / 14000), 75);
-        for (let i = 0; i < count; i++) {
-          particles.push(new Particle());
-        }
-      }
-
-      function connectParticles() {
-        for (let a = 0; a < particles.length; a++) {
-          for (let b = a + 1; b < particles.length; b++) {
-            let dx = particles[a].x - particles[b].x;
-            let dy = particles[a].y - particles[b].y;
-            let dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 100) {
-              let opacity = 1 - (dist / 100);
-              ctx.strokeStyle = document.documentElement.classList.contains('dark') ? `rgba(129, 140, 248, ${opacity * 0.15})` : `rgba(99, 102, 241, ${opacity * 0.12})`;
-              ctx.lineWidth = 1;
-              ctx.beginPath();
-              ctx.moveTo(particles[a].x, particles[a].y);
-              ctx.lineTo(particles[b].x, particles[b].y);
-              ctx.stroke();
-            }
-          }
-        }
-      }
-
-      function animateParticles() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-          p.update();
-          p.draw();
-        });
-        connectParticles();
-        requestAnimationFrame(animateParticles);
-      }
-
-      initParticles();
-      animateParticles();
-    }
-
-    // ================= 13. SPOTLIGHT HOVER & 3D TILT EFFECT =================
-    document.querySelectorAll('.spotlight-card').forEach(card => {
-      card.addEventListener('pointermove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        card.style.setProperty('--mouse-x', `${x}px`);
-        card.style.setProperty('--mouse-y', `${y}px`);
-
-        if (card.classList.contains('tilt-card') && window.innerWidth > 768) {
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -5;
-          const rotateY = ((x - centerX) / centerX) * 5;
-          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
-        }
-      });
-
-      card.addEventListener('pointerleave', () => {
-        if (card.classList.contains('tilt-card')) {
-          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-        }
-      });
-    });
-
-    // ================= 14. SCROLL REVEAL & STAGGER ANIMATIONS =================
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('reveal-visible');
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.reveal-on-scroll').forEach((el, index) => {
-      el.style.transitionDelay = `${(index % 3) * 120}ms`;
-      revealObserver.observe(el);
-    });
-
-    // ================= 15. STATS ANIMATED NUMBER COUNTERS =================
-    let countersAnimated = false;
-    const statsObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !countersAnimated) {
-          countersAnimated = true;
-          document.querySelectorAll('.counter-number').forEach(counter => {
-            const target = parseInt(counter.getAttribute('data-target'), 10);
-            let current = 0;
-            const step = Math.max(Math.ceil(target / 40), 1);
-            const timer = setInterval(() => {
-              current += step;
-              if (current >= target) {
-                counter.textContent = target;
-                clearInterval(timer);
-              } else {
-                counter.textContent = current;
-              }
-            }, 30);
-          });
-        }
-      });
-    }, { threshold: 0.3 });
-
-    const heroSection = document.getElementById('hero');
-    if (heroSection) statsObserver.observe(heroSection);
-
-    // ================= 16. INTERACTIVE PROJECT DETAIL MODAL =================
-    const projectsData = {
-      ruangtenang: {
-        title: "RuangTenang Kampus",
-        subtitle: "Production-Ready Full-Stack Web & AI Mental Health Platform • 2026",
-        icon: "message-square-heart",
-        tags: ["React 19", "TypeScript", "Tailwind CSS", "Gemini API (@google/genai)", "AES-256-GCM", "Prisma ORM", "Express.js", "PostgreSQL"],
-        overview: "Platform kesehatan mental dan konseling mahasiswa berkinerja tinggi yang dirancang dengan standar arsitektur industri dan kepatuhan privasi yang ketat.",
-        highlights: [
-          "<strong>Asisten AI CBT Reflektif:</strong> Didukung Gemini API via server-side proxy dengan SSE streaming untuk respons empatik tanpa latensi.",
-          "<strong>Arsitektur Privacy by Design:</strong> Scrubbing otomatis data pribadi sensitif (PII), deteksi krisis multi-lapis dengan negation handling, dan enkripsi database AES-256-GCM.",
-          "<strong>Penjadwalan Konseling Real-time:</strong> Transaksi database ACID anti double-booking dengan konversi otomatis 3 zona waktu (WIB, WITA, WIT).",
-          "<strong>Skrining Klinis Tervalidasi:</strong> Instrumen PHQ-9 (Depresi) & GAD-7 (Kecemasan) dengan pemicu darurat otomatis untuk situasi berisiko."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/RuangTenang"
-      },
-      impactgrid: {
-        title: "ImpactGrid — AI Sustainability DSS",
-        subtitle: "Ketua Tim (Awakening Reborn) • TDC Summit Fest 2026 (Studi Kasus Telkomsel)",
-        icon: "leaf",
-        tags: ["Decision Support System (DSS)", "AI Optimization", "ESG Analytics", "Financial Modeling", "Telkomsel Case"],
-        overview: "Sistem pendukung keputusan berbasis AI guna mengoptimalkan investasi efisiensi energi jaringan telekomunikasi (BTS/RAN) Telkomsel untuk memitigasi 63,6% emisi Scope 2.",
-        highlights: [
-          "<strong>4 Pilar Solusi Strategis:</strong> Network Data Hub (agregasi energi & trafik), Scenario Lab (simulasi intervensi efisiensi energi), Investment Prioritizer (prioritas CAPEX/OPEX), dan ESG Impact Verification (jejak audit ESG).",
-          "<strong>Evaluasi Multi-Parameter:</strong> Menyeimbangkan rasio kWh/TB, reduksi emisi CO2e, dan kepatuhan batas minimum Quality of Service (QoS).",
-          "<strong>Pemodelan Finansial Mendalam:</strong> Perhitungan Net Present Value (NPV), payback period, dan net cost per ton CO2e reduced.",
-          "<strong>Roadmap Pilot:</strong> Perancangan implementasi bertahap pada 120 lokasi site-equivalent."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/impactgrid-prototype"
-      },
-      sikaya: {
-        title: "SiKaya — Multi-Asset Finance Education",
-        subtitle: "Investment Technology & Product Concept",
-        icon: "line-chart",
-        tags: ["Fintech", "Portfolio Tracking", "Data Analytics", "UI/UX Prototyping"],
-        overview: "Platform edukasi investasi terintegrasi untuk instrumen saham, cryptocurrency, obligasi, dan emas guna meningkatkan literasi finansial generasi muda.",
-        highlights: [
-          "<strong>Simulasi Portofolio Dinamis:</strong> Visualisasi alokasi aset dan profil risiko pengguna.",
-          "<strong>Riset Pengguna Berkelanjutan:</strong> Merancang user flow yang ramah bagi investor pemula.",
-          "<strong>Interaksi Desain Modern:</strong> Dibuat dengan fondasi sistem desain modular dan responsif."
-        ],
-        github: "https://github.com/irsyadazaki77-beep/SiKaya"
-      }
-    };
-
-    const projectModal = document.getElementById('projectModal');
-    const projectModalContent = document.getElementById('projectModalContent');
-
-    function openProjectModal(id) {
-      const data = projectsData[id];
-      if (!data) return;
-
-      document.getElementById('modalProjectTitle').textContent = data.title;
-      document.getElementById('modalProjectSubtitle').textContent = data.subtitle;
-
-      let tagsHtml = data.tags.map(t => `<span class="px-2.5 py-1 text-xs font-medium rounded-lg bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400">${t}</span>`).join('');
-      let highlightsHtml = data.highlights.map(h => `<li class="flex items-start gap-2.5"><i data-lucide="check-circle" class="w-4 h-4 text-emerald-500 shrink-0 mt-0.5"></i><span>${h}</span></li>`).join('');
-
-      document.getElementById('modalProjectBody').innerHTML = `
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Ikhtisar Solusi</h4>
-          <p class="text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-200">${data.overview}</p>
-        </div>
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Fitur Utama & Arsitektur</h4>
-          <ul class="space-y-2.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300">${highlightsHtml}</ul>
-        </div>
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Teknologi & Framework</h4>
-          <div class="flex flex-wrap gap-1.5">${tagsHtml}</div>
-        </div>
-      `;
-
-      document.getElementById('modalProjectActions').innerHTML = `
-        <a href="${data.github}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-200 text-white dark:text-slate-900 font-bold text-xs transition-all shadow-md">
-          <i data-lucide="github" class="w-4 h-4"></i>
-          <span>Kunjungi Repositori GitHub</span>
-        </a>
-      `;
-
-      projectModal.classList.remove('hidden');
-      setTimeout(() => {
-        projectModal.classList.remove('opacity-0');
-        projectModalContent.classList.remove('scale-95');
-        projectModalContent.classList.add('scale-100');
-        lucide.createIcons();
-      }, 10);
-      playClickSound(650, 0.05);
-    }
-
-    function closeProjectModal() {
-      projectModal.classList.add('opacity-0');
-      projectModalContent.classList.remove('scale-100');
-      projectModalContent.classList.add('scale-95');
-      setTimeout(() => {
-        projectModal.classList.add('hidden');
-      }, 300);
-    }
-
-    projectModal?.addEventListener('click', (e) => {
-      if (e.target === projectModal) closeProjectModal();
-    });
-
-    // ================= 17. IN-PAGE CERTIFICATE QUICK VIEWER MODAL =================
-    const certModal = document.getElementById('certModal');
-    const certModalContent = document.getElementById('certModalContent');
-    const modalCertFrame = document.getElementById('modalCertFrame');
-    const modalCertImg = document.getElementById('modalCertImg');
-
-    function openCertModal(title, issuer, filePath) {
-      document.getElementById('modalCertTitle').textContent = title;
-      document.getElementById('modalCertIssuer').textContent = issuer;
-      document.getElementById('modalCertDownloadBtn').href = filePath;
-      document.getElementById('modalCertExternalBtn').href = filePath;
-
-      if (filePath.endsWith('.pdf')) {
-        modalCertFrame.src = filePath;
-        modalCertFrame.classList.remove('hidden');
-        modalCertImg.classList.add('hidden');
-      } else {
-        modalCertImg.src = filePath;
-        modalCertImg.classList.remove('hidden');
-        modalCertFrame.classList.add('hidden');
-      }
-
-      certModal.classList.remove('hidden');
-      setTimeout(() => {
-        certModal.classList.remove('opacity-0');
-        certModalContent.classList.remove('scale-95');
-        certModalContent.classList.add('scale-100');
-        lucide.createIcons();
-      }, 10);
-      playClickSound(700, 0.05);
-    }
-
-    function closeCertModal() {
-      certModal.classList.add('opacity-0');
-      certModalContent.classList.remove('scale-100');
-      certModalContent.classList.add('scale-95');
-      setTimeout(() => {
-        certModal.classList.add('hidden');
-        modalCertFrame.src = '';
-        modalCertImg.src = '';
-      }, 300);
-    }
-
-    certModal?.addEventListener('click', (e) => {
-      if (e.target === certModal) closeCertModal();
-    });
-
-    // Intercept certificate links to open in modal smoothly
-    document.querySelectorAll('a[href^="certificates/"]').forEach(link => {
-      link.addEventListener('click', (e) => {
-        const href = link.getAttribute('href');
-        const card = link.closest('.cert-card, .p-6, .mb-10');
-        const title = card ? (card.querySelector('h3, h4')?.textContent || 'Sertifikat Resmi') : 'Sertifikat Resmi';
-        const issuer = card ? (card.querySelector('p')?.textContent || 'Dokumen Terverifikasi') : 'Dokumen Terverifikasi';
-        
-        // Open modal
-        e.preventDefault();
-        openCertModal(title.trim(), issuer.trim(), href);
-      });
-    });
-
-    // ================= 18. DEVELOPER TERMINAL CLI CONTROLLER =================
-    const terminalModal = document.getElementById('terminalModal');
-    const terminalOutput = document.getElementById('terminalOutput');
-    const terminalInput = document.getElementById('terminalInput');
-
-    function toggleTerminalModal() {
-      if (terminalModal.classList.contains('hidden')) {
-        terminalModal.classList.remove('hidden');
-        setTimeout(() => {
-          terminalModal.classList.remove('opacity-0');
-          terminalModal.querySelector('div').classList.remove('scale-95');
-          terminalModal.querySelector('div').classList.add('scale-100');
-          terminalInput.focus();
-        }, 10);
-        playClickSound(900, 0.05);
-      } else {
-        terminalModal.classList.add('opacity-0');
-        terminalModal.querySelector('div').classList.remove('scale-100');
-        terminalModal.querySelector('div').classList.add('scale-95');
-        setTimeout(() => {
-          terminalModal.classList.add('hidden');
-        }, 300);
-      }
-    }
-
-    const commandHistory = [];
-    let historyIndex = -1;
-
-    terminalInput?.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const cmd = terminalInput.value.trim();
-        if (cmd) {
-          commandHistory.push(cmd);
-          historyIndex = commandHistory.length;
-          executeTerminalCommand(cmd);
-          terminalInput.value = '';
-        }
-      } else if (e.key === 'ArrowUp') {
-        if (historyIndex > 0) {
-          historyIndex--;
-          terminalInput.value = commandHistory[historyIndex];
-        }
-      } else if (e.key === 'ArrowDown') {
-        if (historyIndex < commandHistory.length - 1) {
-          historyIndex++;
-          terminalInput.value = commandHistory[historyIndex];
-        } else {
-          historyIndex = commandHistory.length;
-          terminalInput.value = '';
-        }
-      }
-    });
-
-    function executeTerminalCommand(cmd) {
-      const line = document.createElement('div');
-      line.innerHTML = `<span class="text-emerald-400 font-bold">zaki@dev:~$</span> <span>${escapeHtml(cmd)}</span>`;
-      terminalOutput.appendChild(line);
-
-      const normalized = cmd.toLowerCase().trim();
-      const response = document.createElement('div');
-      response.className = 'text-slate-300 leading-relaxed';
-
-      switch (normalized) {
-        case 'help':
-          response.innerHTML = `
-            <div class="text-amber-400 font-bold mb-1">Daftar Perintah yang Tersedia:</div>
-            <div>• <strong class="text-cyan-400">about</strong>    : Ringkasan profil Zaki Irsyada Putra</div>
-            <div>• <strong class="text-cyan-400">skills</strong>   : Menampilkan daftar teknologi & AI toolkit</div>
-            <div>• <strong class="text-cyan-400">projects</strong> : Proyek unggulan (RuangTenang, ImpactGrid, dll)</div>
-            <div>• <strong class="text-cyan-400">awards</strong>   : Prestasi kejuaraan (Juara 1 INSIGHT, dll)</div>
-            <div>• <strong class="text-cyan-400">certs</strong>    : Sertifikasi Komdigi & Microsoft</div>
-            <div>• <strong class="text-cyan-400">contact</strong>  : Info kontak & WhatsApp</div>
-            <div>• <strong class="text-cyan-400">sudo hire</strong>: Khusus recruiter yang ingin merekrut! 🚀</div>
-            <div>• <strong class="text-cyan-400">clear</strong>    : Membersihkan layar terminal</div>
-          `;
-          break;
-
-        case 'about':
-          response.innerHTML = `
-            <div class="text-brand-300 font-bold">Zaki Irsyada Putra</div>
-            <div>Mahasiswa S1 Sistem Informasi di Telkom University Surabaya.</div>
-            <div>Fokus: Software & AI Engineering, Full-Stack Web (React 19, TS), Privacy by Design, dan Data Science.</div>
-          `;
-          break;
-
-        case 'skills':
-          response.innerHTML = `
-            <div class="text-emerald-400 font-bold mb-1">⚙️ Technical Stack:</div>
-            <div>• Web: React 19, TypeScript, JavaScript, Tailwind CSS, Express.js, Prisma ORM, Node.js</div>
-            <div>• AI: Gemini API, Prompt Engineering, SSE Streaming, Scikit-Learn, Pandas, NumPy</div>
-            <div>• Security: AES-256-GCM, PII Scrubbing, RBAC, Zod Validation</div>
-            <div>• Cloud & Tools: Microsoft Azure, Microsoft Fabric, Git, PostgreSQL, SQLite</div>
-          `;
-          break;
-
-        case 'projects':
-          response.innerHTML = `
-            <div class="text-indigo-400 font-bold mb-1">🚀 Proyek Pilihan:</div>
-            <div>1. <strong class="text-white">RuangTenang Kampus</strong> : Platform AI CBT Mental Health (Production-Ready)</div>
-            <div>2. <strong class="text-white">ImpactGrid</strong> : AI Network Sustainability DSS (Telkomsel Case)</div>
-            <div>3. <strong class="text-white">SiKaya</strong> : Platform Edukasi Investasi Multi-Aset</div>
-            <div>4. <strong class="text-white">OmniTRAF</strong> : Intelligent Telemetry Dashboard</div>
-            <div class="mt-1 text-slate-400">Ketik 'projects' di web atau klik kartu untuk detail lengkap.</div>
-          `;
-          break;
-
-        case 'awards':
-          response.innerHTML = `
-            <div class="text-amber-400 font-bold mb-1">🏆 Prestasi & Kejuaraan:</div>
-            <div>• 🥇 <strong class="text-white">Juara 1 Nasional</strong> - Business Case Competition INSIGHT 2025 (Telkom University Surabaya)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - YED UI 2025 Business Plan Competition (Universitas Indonesia)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - DIGITOPIA FAIR 4.0 2026 (Telkom University Surabaya)</div>
-            <div>• 🥈 <strong class="text-white">Semi-Finalis</strong> - IMAGEPRENEUR 2025 (Universitas Pendidikan Indonesia)</div>
-          `;
-          break;
-
-        case 'certs':
-          response.innerHTML = `
-            <div class="text-purple-400 font-bold mb-1">📜 Kredensial Resmi:</div>
-            <div>• Associate Data Scientist + Python (Komdigi • 31 Jam)</div>
-            <div>• Data Scientist Supervisor (Komdigi • 20 Jam)</div>
-            <div>• Microsoft Fabric & Azure Fundamentals (Komdigi & Microsoft • 17 Jam)</div>
-            <div>• Belajar Dasar AI (Dicoding • ID: GRX5JWY9KX0M)</div>
-            <div>• Dasar-dasar Keamanan AI (Komdigi & Microsoft)</div>
-            <div>• Ethical Hacker For Dummies & Cyber Security Awareness (Komdigi)</div>
-          `;
-          break;
-
-        case 'contact':
-          response.innerHTML = `
-            <div class="text-cyan-400 font-bold mb-1">📬 Kontak Zaki:</div>
-            <div>• Email: <a href="mailto:irsyadazaki77@gmail.com" class="text-brand-300 underline">irsyadazaki77@gmail.com</a></div>
-            <div>• WhatsApp: <a href="https://wa.me/6282198069550" target="_blank" class="text-emerald-400 underline">+62 821-9806-9550</a></div>
-            <div>• GitHub: <a href="https://github.com/irsyadazaki77-beep" target="_blank" class="text-blue-400 underline">github.com/irsyadazaki77-beep</a></div>
-          `;
-          break;
-
-        case 'sudo hire':
-        case 'sudo hire-zaki':
-        case 'hire':
-          response.innerHTML = `
-            <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 font-bold">
-              🎉 ACCESS GRANTED! Penawaran kerja diterima dengan antusiasme tinggi!
-              <div class="text-xs font-normal text-white mt-1">Zaki Irsyada Putra siap berkontribusi optimal pada tim Anda. Mari jadwalkan sesi wawancara via WhatsApp atau Email! 🚀</div>
-            </div>
-          `;
-          playClickSound(880, 0.1);
-          break;
-
-        case 'clear':
-          terminalOutput.innerHTML = '';
-          return;
-
-        case 'date':
-          response.textContent = new Date().toString();
-          break;
-
-        default:
-          if (normalized.startsWith('echo ')) {
-            response.textContent = cmd.substring(5);
-          } else {
-            response.innerHTML = `<span class="text-rose-400">Command not found: "${escapeHtml(cmd)}".</span> Ketik <span class="text-amber-400 font-bold">help</span> untuk daftar perintah.`;
-          }
-          break;
-      }
-
-      terminalOutput.appendChild(response);
-      terminalOutput.scrollTop = terminalOutput.scrollHeight;
-      playClickSound(450, 0.03);
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // Universal ESC Key to close any active modal
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeProjectModal();
-        closeCertModal();
-        if (!terminalModal.classList.contains('hidden')) {
-          toggleTerminalModal();
-        }
-      }
-    });
-
   </script>
   
   <style>
@@ -1978,12 +121,12 @@
     }
 
     .glassmorphism {
-      background: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
     }
     .dark .glassmorphism {
-      background: rgba(15, 23, 42, 0.82);
+      background: rgba(15, 23, 42, 0.85);
     }
 
     .bg-grid-pattern {
@@ -1994,17 +137,6 @@
     .dark .bg-grid-pattern {
       background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
                         linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
-    }
-
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: rgba(148, 163, 184, 0.4);
-      border-radius: 9999px;
     }
 
     /* Spotlight card glow effect */
@@ -2057,14 +189,25 @@
       background-size: 16px 16px;
     }
 
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.4);
+      border-radius: 9999px;
+    }
     ::-webkit-scrollbar-thumb:hover {
       background: rgba(148, 163, 184, 0.7);
     }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100 transition-colors duration-300 font-sans antialiased selection:bg-brand-500 selection:text-white relative overflow-x-hidden min-h-screen">
-  <div id="scrollProgressBar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-brand-600 via-indigo-500 to-purple-500 z-[100] transition-all duration-75 shadow-sm shadow-brand-500/50" style="width: 0%"></div>
 
+  <!-- Scroll Reading Progress Bar -->
+  <div id="scrollProgressBar" class="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-brand-600 via-indigo-500 to-purple-500 z-[100] transition-all duration-75 shadow-sm shadow-brand-500/50" style="width: 0%"></div>
 
   <!-- Background Grids & Ambient Glow -->
   <div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0"></div>
@@ -2110,7 +253,6 @@
 
       <!-- Action Buttons -->
       <div class="flex items-center gap-2 sm:gap-3">
-        
         <!-- Sound Effect Toggle Button -->
         <button id="soundToggleBtn" aria-label="Toggle Efek Suara" title="Aktifkan/Matikan Efek Suara Interaktif" class="p-2 rounded-full text-slate-600 dark:text-slate-300 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors">
           <i data-lucide="volume-2" class="w-4 h-4 hidden" id="soundOnIcon"></i>
@@ -2176,8 +318,10 @@
   <main class="relative z-10">
     <!-- Hero Section -->
     <section id="hero" class="min-h-screen pt-36 pb-20 flex items-center justify-center relative overflow-hidden">
+      <!-- Interactive Hero Particle Canvas -->
       <canvas id="heroParticles" class="absolute inset-0 w-full h-full pointer-events-none z-0 opacity-40 dark:opacity-60"></canvas>
-      <div class="max-w-5xl mx-auto px-6 text-center">
+
+      <div class="max-w-5xl mx-auto px-6 text-center relative z-10">
         
         <!-- Status Pill -->
         <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold tracking-wide mb-8 animate-pulse-subtle">
@@ -2241,15 +385,15 @@
 
         <!-- Metric Highlights -->
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 text-left">
-          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
+          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm spotlight-card">
             <div class="font-display text-3xl font-black text-slate-900 dark:text-white">Full-Stack</div>
             <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">React 19, TS & Express</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
-            <div class="font-display text-3xl font-black text-slate-900 dark:text-white">AI Systems</div>
-            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Gemini API & SSE Stream</div>
+          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm spotlight-card">
+            <div class="font-display text-3xl font-black text-slate-900 dark:text-white"><span class="counter-number" data-target="20">20</span>+</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Repositori GitHub Aktif</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-amber-500/30 dark:border-amber-500/30 shadow-sm backdrop-blur-sm relative overflow-hidden group">
+          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-amber-500/30 dark:border-amber-500/30 shadow-sm backdrop-blur-sm relative overflow-hidden group spotlight-card">
             <div class="absolute -right-2 -bottom-2 w-12 h-12 bg-amber-500/10 rounded-full blur-md"></div>
             <div class="font-display text-3xl font-black text-amber-500 flex items-center gap-1.5">
               <span>Juara 1</span>
@@ -2257,9 +401,9 @@
             </div>
             <div class="text-xs text-slate-600 dark:text-slate-300 mt-1 font-medium">BCC INSIGHT 2025</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
-            <div class="font-display text-3xl font-black text-slate-900 dark:text-white">Security</div>
-            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">AES-256 & Privacy by Design</div>
+          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm spotlight-card">
+            <div class="font-display text-3xl font-black text-slate-900 dark:text-white"><span class="counter-number" data-target="15">15</span>+</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Sertifikat Terverifikasi</div>
           </div>
         </div>
 
@@ -2273,7 +417,7 @@
           
           <!-- Code Card Preview -->
           <div class="md:col-span-5 relative">
-            <div class="relative rounded-3xl p-6 bg-gradient-to-tr from-brand-600/10 to-indigo-600/20 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
+            <div class="relative rounded-3xl p-6 bg-gradient-to-tr from-brand-600/10 to-indigo-600/20 border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden spotlight-card tilt-card">
               <div class="rounded-2xl bg-slate-950 p-4 font-mono text-xs text-slate-300 shadow-2xl border border-slate-800">
                 <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
                   <div class="flex gap-1.5">
@@ -2386,7 +530,7 @@
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           
           <!-- Card 1: Pemrograman & Framework -->
-          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all spotlight-card tilt-card">
             <div class="w-12 h-12 rounded-2xl bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center mb-5">
               <i data-lucide="code-2" class="w-6 h-6"></i>
             </div>
@@ -2407,7 +551,7 @@
           </div>
 
           <!-- Card 2: Data & Kecerdasan Artifisial (AI) -->
-          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all spotlight-card tilt-card">
             <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-5">
               <i data-lucide="brain-circuit" class="w-6 h-6"></i>
             </div>
@@ -2426,7 +570,7 @@
           </div>
 
           <!-- Card 3: Keamanan & Arsitektur Sistem -->
-          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all spotlight-card tilt-card">
             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-5">
               <i data-lucide="shield" class="w-6 h-6"></i>
             </div>
@@ -2444,7 +588,7 @@
           </div>
 
           <!-- Card 4: Database, Cloud & Tools -->
-          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all spotlight-card tilt-card">
             <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-5">
               <i data-lucide="database" class="w-6 h-6"></i>
             </div>
@@ -2463,7 +607,7 @@
           </div>
 
           <!-- Card 5: Bisnis, Produk & Manajemen -->
-          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all spotlight-card tilt-card">
             <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center mb-5">
               <i data-lucide="briefcase" class="w-6 h-6"></i>
             </div>
@@ -2481,7 +625,7 @@
           </div>
 
           <!-- Card 6: UI/UX & Soft Skills -->
-          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+          <div class="p-7 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all spotlight-card tilt-card">
             <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-600 dark:text-pink-400 flex items-center justify-center mb-5">
               <i data-lucide="sparkles" class="w-6 h-6"></i>
             </div>
@@ -2553,7 +697,7 @@
                   <span class="px-2 py-0.5 text-[10px] rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Prisma ORM</span>
                 </div>
               </div>
-                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
+              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
                 <button onclick="openProjectModal('ruangtenang')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 font-bold text-xs transition-colors">
                   <i data-lucide="info" class="w-3.5 h-3.5"></i>
                   <span>Detail & Arsitektur</span>
@@ -2585,7 +729,7 @@
                 </div>
                 <h3 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-2">ImpactGrid — Telkomsel Case</h3>
                 <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  Sistem Pendukung Keputusan (DSS) berbasis AI yang dipimpin oleh Zaki (Ketua Tim Awakening Reborn di TDC Summit Fest 2026). Mengoptimalkan investasi efisiensi energi jaringan telekomunikasi (BTS/RAN) guna memitigasi 63,6% emisi Scope 2 dengan arsitektur 4 pilar, evaluasi multi-parameter (kWh/TB, CO2e), dan pemodelan finansial NPV.
+                  Sistem Pendukung Keputusan (DSS) berbasis AI yang dipimpin oleh Zaki (Ketua Tim Awakening Reborn di TDC Summit Fest 2026). Mengoptimalkan investasi efisiensi energi jaringan telekomunikasi (BTS/RAN) Telkomsel guna memitigasi 63,6% emisi Scope 2 dengan arsitektur 4 pilar, evaluasi multi-parameter (kWh/TB, CO2e), dan pemodelan finansial NPV.
                 </p>
                 <div class="flex flex-wrap gap-1.5 mb-6">
                   <span class="px-2 py-0.5 text-[10px] rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Decision Support</span>
@@ -2593,7 +737,7 @@
                   <span class="px-2 py-0.5 text-[10px] rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Financial Modeling</span>
                 </div>
               </div>
-                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
+              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
                 <button onclick="openProjectModal('impactgrid')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-xs transition-colors">
                   <i data-lucide="info" class="w-3.5 h-3.5"></i>
                   <span>Detail & 4 Pilar</span>
@@ -2633,7 +777,7 @@
                   <span class="px-2 py-0.5 text-[10px] rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Data Analysis</span>
                 </div>
               </div>
-                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
+              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
                 <button onclick="openProjectModal('sikaya')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold text-xs transition-colors">
                   <i data-lucide="info" class="w-3.5 h-3.5"></i>
                   <span>Detail Produk</span>
@@ -2647,7 +791,7 @@
           </article>
 
           <!-- Project 4: UOT Interactive Learning -->
-          <article class="project-card spotlight-card tilt-card reveal-on-scroll group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col" data-category="data-edtech" data-project-id="sikaya">
+          <article class="project-card spotlight-card tilt-card reveal-on-scroll group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col" data-category="data-edtech" data-project-id="uot">
             <div class="aspect-video bg-gradient-to-tr from-cyan-600 via-blue-700 to-indigo-800 flex items-center justify-center p-6 text-white relative overflow-hidden">
               <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
               <div class="relative z-10 text-center">
@@ -2673,18 +817,21 @@
                   <span class="px-2 py-0.5 text-[10px] rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">JavaScript</span>
                 </div>
               </div>
-              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                <a href="https://github.com/irsyadazaki77-beep/UOT" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-600 dark:text-cyan-400 hover:underline">
+              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
+                <button onclick="openProjectModal('uot')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 font-bold text-xs transition-colors">
+                  <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                  <span>Detail Pembelajaran</span>
+                </button>
+                <a href="https://github.com/irsyadazaki77-beep/UOT" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-cyan-600 transition-colors">
                   <i data-lucide="github" class="w-3.5 h-3.5"></i>
-                  <span>Buka Repository</span>
+                  <span>Repo</span>
                 </a>
-                <span class="text-[11px] text-slate-400 font-mono">Open Source</span>
               </div>
             </div>
           </article>
 
           <!-- Project 5: OmniTRAF Dashboard -->
-          <article class="project-card spotlight-card tilt-card reveal-on-scroll group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col" data-category="ai-web" data-project-id="ruangtenang">
+          <article class="project-card spotlight-card tilt-card reveal-on-scroll group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col" data-category="ai-web" data-project-id="omnitraf">
             <div class="aspect-video bg-gradient-to-tr from-sky-600 via-blue-700 to-indigo-900 flex items-center justify-center p-6 text-white relative overflow-hidden">
               <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
               <div class="relative z-10 text-center">
@@ -2710,18 +857,21 @@
                   <span class="px-2 py-0.5 text-[10px] rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Web/iOS</span>
                 </div>
               </div>
-              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                <a href="https://github.com/irsyadazaki77-beep/omnitraf-ios-dashboard" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:underline">
+              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
+                <button onclick="openProjectModal('omnitraf')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/10 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 font-bold text-xs transition-colors">
+                  <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                  <span>Detail Telemetri</span>
+                </button>
+                <a href="https://github.com/irsyadazaki77-beep/omnitraf-ios-dashboard" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-sky-600 transition-colors">
                   <i data-lucide="github" class="w-3.5 h-3.5"></i>
-                  <span>Buka Repository</span>
+                  <span>Repo</span>
                 </a>
-                <span class="text-[11px] text-slate-400 font-mono">Public Repo</span>
               </div>
             </div>
           </article>
 
           <!-- Project 6: Voxel-Verse 3D -->
-          <article class="project-card spotlight-card tilt-card reveal-on-scroll group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col" data-category="ai-web" data-project-id="ruangtenang">
+          <article class="project-card spotlight-card tilt-card reveal-on-scroll group bg-white dark:bg-slate-900 rounded-3xl overflow-hidden border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col" data-category="ai-web" data-project-id="voxelverse">
             <div class="aspect-video bg-gradient-to-tr from-violet-600 via-purple-700 to-pink-800 flex items-center justify-center p-6 text-white relative overflow-hidden">
               <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
               <div class="relative z-10 text-center">
@@ -2747,12 +897,15 @@
                   <span class="px-2 py-0.5 text-[10px] rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">JavaScript</span>
                 </div>
               </div>
-              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                <a href="https://github.com/irsyadazaki77-beep/Voxel-Verse-V1" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+              <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800/80 gap-2">
+                <button onclick="openProjectModal('voxelverse')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-violet-500/10 hover:bg-violet-500/20 text-violet-600 dark:text-violet-400 font-bold text-xs transition-colors">
+                  <i data-lucide="info" class="w-3.5 h-3.5"></i>
+                  <span>Detail 3D Web</span>
+                </button>
+                <a href="https://github.com/irsyadazaki77-beep/Voxel-Verse-V1" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-violet-600 transition-colors">
                   <i data-lucide="github" class="w-3.5 h-3.5"></i>
-                  <span>Buka Repository</span>
+                  <span>Repo</span>
                 </a>
-                <span class="text-[11px] text-slate-400 font-mono">Experimental</span>
               </div>
             </div>
           </article>
@@ -2853,7 +1006,7 @@
       </div>
     </section>
 
-        <!-- Prestasi & Penghargaan Kompetisi -->
+    <!-- Prestasi & Penghargaan Kompetisi -->
     <section id="prestasi" class="py-24 border-t border-slate-200 dark:border-slate-800/80 relative">
       <div class="max-w-5xl mx-auto px-6">
         
@@ -2867,7 +1020,7 @@
         </div>
 
         <!-- Highlight Juara 1 Card -->
-        <div class="mb-10 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-transparent border-2 border-amber-500/40 shadow-xl relative overflow-hidden">
+        <div class="mb-10 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-transparent border-2 border-amber-500/40 shadow-xl relative overflow-hidden spotlight-card tilt-card">
           <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
             <div class="flex items-start gap-5">
@@ -2905,7 +1058,7 @@
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           
           <!-- Card Semi-Finalist 1: YED UI -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between spotlight-card tilt-card">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-wider">
@@ -2930,7 +1083,7 @@
           </div>
 
           <!-- Card Semi-Finalist 2: DIGITOPIA FAIR 4.0 -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between spotlight-card tilt-card">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="px-2.5 py-1 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-[10px] font-black uppercase tracking-wider">
@@ -2955,7 +1108,7 @@
           </div>
 
           <!-- Card Semi-Finalist 3: IMAGEPRENEUR UPI -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between spotlight-card tilt-card">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="px-2.5 py-1 rounded-lg bg-pink-500/10 text-pink-600 dark:text-pink-400 text-[10px] font-black uppercase tracking-wider">
@@ -2980,7 +1133,7 @@
           </div>
 
           <!-- Card Competitor 4: D-Techtion Tel-U Bandung -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between spotlight-card tilt-card">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-wider">
@@ -3005,7 +1158,7 @@
           </div>
 
           <!-- Card Competitor 5: TDC Summit Fest ITS -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between spotlight-card tilt-card">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-black uppercase tracking-wider">
@@ -3030,7 +1183,7 @@
           </div>
 
           <!-- Card Competitor 6: International Youth Innovation Summit -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between spotlight-card tilt-card">
             <div>
               <div class="flex items-center justify-between mb-3">
                 <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-black uppercase tracking-wider">
@@ -3444,7 +1597,7 @@
 
       </div>
     </section>
-  
+
     <!-- ================= MODALS & DEVELOPER TERMINAL ================= -->
 
     <!-- 1. Interactive Project Deep-Dive Modal -->
@@ -3563,10 +1716,9 @@
         </div>
       </div>
     </div>
-
   </main>
 
-  <!-- Interactive Scripts -->
+  <!-- Complete Interactive Scripts (Positioned right before closing body) -->
   <script>
     // 1. Initialize Lucide Icons
     lucide.createIcons();
@@ -3593,7 +1745,7 @@
       lucide.createIcons();
     }
 
-    themeToggleBtn.addEventListener('click', toggleTheme);
+    themeToggleBtn?.addEventListener('click', toggleTheme);
 
     // Keyboard shortcut 'T' to toggle theme
     window.addEventListener('keydown', (e) => {
@@ -3606,13 +1758,13 @@
     const accentBtn = document.getElementById('accentBtn');
     const accentMenu = document.getElementById('accentMenu');
     
-    accentBtn.addEventListener('click', (e) => {
+    accentBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
-      accentMenu.classList.toggle('hidden');
+      accentMenu?.classList.toggle('hidden');
     });
 
     document.addEventListener('click', () => {
-      accentMenu.classList.add('hidden');
+      accentMenu?.classList.add('hidden');
     });
 
     document.querySelectorAll('[data-color]').forEach(btn => {
@@ -3633,13 +1785,13 @@
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+    mobileMenuBtn?.addEventListener('click', () => {
+      mobileMenu?.classList.toggle('hidden');
     });
 
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
       link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
+        mobileMenu?.classList.add('hidden');
       });
     });
 
@@ -3670,76 +1822,7 @@
       });
     });
 
-    // 6. Toast Notification Helper
-    const toast = document.getElementById('toast');
-    const toastMessage = document.getElementById('toastMessage');
-    let toastTimeout;
-
-    function showToast(message) {
-      toastMessage.textContent = message;
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      toast.classList.add('translate-y-0', 'opacity-100');
-      clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-20', 'opacity-0');
-      }, 3000);
-    }
-
-    // 7. Copy Email Action
-    const myEmail = 'irsyadazaki77@gmail.com';
-    function copyEmail() {
-      navigator.clipboard.writeText(myEmail).then(() => {
-        showToast('✓ Email berhasil disalin: irsyadazaki77@gmail.com');
-      }).catch(() => {
-        showToast('Gagal menyalin email otomatis.');
-      });
-    }
-
-    document.getElementById('copyEmailContactBtn')?.addEventListener('click', copyEmail);
-
-    // 8. Typewriter Headline Effect
-    const roles = [
-      "Software & AI Engineer",
-      "S1 Sistem Informasi — Telkom University",
-      "Full-Stack Web Developer",
-      "Data & Decision Support Specialist",
-      "Ex-Marketing Manager"
-    ];
-    let roleIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    const typewriterElement = document.getElementById('typewriter');
-
-    function typeEffect() {
-      const currentRole = roles[roleIndex];
-      if (isDeleting) {
-        charIndex--;
-        typewriterElement.textContent = currentRole.substring(0, charIndex);
-      } else {
-        charIndex++;
-        typewriterElement.textContent = currentRole.substring(0, charIndex);
-      }
-
-      let typingSpeed = isDeleting ? 40 : 80;
-
-      if (!isDeleting && charIndex === currentRole.length) {
-        typingSpeed = 2200;
-        isDeleting = true;
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        roleIndex = (roleIndex + 1) % roles.length;
-        typingSpeed = 350;
-      }
-
-      setTimeout(typeEffect, typingSpeed);
-    }
-
-    if (typewriterElement) {
-      setTimeout(typeEffect, 800);
-    }
-  
-    // 9. Certificate Filtering Logic
+    // 6. Certificate Filtering Logic
     const certFilterButtons = document.querySelectorAll('.cert-filter-btn');
     const certCards = document.querySelectorAll('.cert-card');
 
@@ -3766,8 +1849,78 @@
       });
     });
 
-  
-    // ================= 10. INTERACTIVE AUDIO SYNTHESIZER =================
+    // 7. Toast Notification Helper
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+    let toastTimeout;
+
+    function showToast(message) {
+      if (!toast || !toastMessage) return;
+      toastMessage.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+
+    // 8. Copy Email Action
+    const myEmail = 'irsyadazaki77@gmail.com';
+    function copyEmail() {
+      navigator.clipboard.writeText(myEmail).then(() => {
+        showToast('✓ Email berhasil disalin: irsyadazaki77@gmail.com');
+      }).catch(() => {
+        showToast('Gagal menyalin email otomatis.');
+      });
+    }
+
+    document.getElementById('copyEmailContactBtn')?.addEventListener('click', copyEmail);
+
+    // 9. Typewriter Headline Effect
+    const roles = [
+      "Software & AI Engineer",
+      "S1 Sistem Informasi — Telkom University",
+      "Full-Stack Web Developer",
+      "Data & Decision Support Specialist",
+      "Ex-Marketing Manager"
+    ];
+    let roleIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    const typewriterElement = document.getElementById('typewriter');
+
+    function typeEffect() {
+      if (!typewriterElement) return;
+      const currentRole = roles[roleIndex];
+      if (isDeleting) {
+        charIndex--;
+        typewriterElement.textContent = currentRole.substring(0, charIndex);
+      } else {
+        charIndex++;
+        typewriterElement.textContent = currentRole.substring(0, charIndex);
+      }
+
+      let typingSpeed = isDeleting ? 40 : 80;
+
+      if (!isDeleting && charIndex === currentRole.length) {
+        typingSpeed = 2200;
+        isDeleting = true;
+      } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        roleIndex = (roleIndex + 1) % roles.length;
+        typingSpeed = 350;
+      }
+
+      setTimeout(typeEffect, typingSpeed);
+    }
+
+    if (typewriterElement) {
+      setTimeout(typeEffect, 800);
+    }
+
+    // 10. Interactive Audio Synthesizer (Web Audio API)
     let audioCtx = null;
     let isSoundEnabled = false;
     const soundToggleBtn = document.getElementById('soundToggleBtn');
@@ -3818,7 +1971,7 @@
       el.addEventListener('click', () => playClickSound(550, 0.04));
     });
 
-    // ================= 11. SCROLL READING PROGRESS BAR =================
+    // 11. Scroll Reading Progress Bar
     const scrollProgressBar = document.getElementById('scrollProgressBar');
     window.addEventListener('scroll', () => {
       const scrollTop = window.scrollY || document.documentElement.scrollTop;
@@ -3829,9 +1982,9 @@
       }
     });
 
-    // ================= 12. HERO INTERACTIVE PARTICLE CANVAS =================
+    // 12. Hero Interactive Particle Canvas
     const canvas = document.getElementById('heroParticles');
-    if (canvas) {
+    if (canvas && canvas.parentElement) {
       const ctx = canvas.getContext('2d');
       let particles = [];
       let width = canvas.width = canvas.parentElement.offsetWidth;
@@ -3939,7 +2092,7 @@
       animateParticles();
     }
 
-    // ================= 13. SPOTLIGHT HOVER & 3D TILT EFFECT =================
+    // 13. Spotlight Hover & 3D Tilt Effect
     document.querySelectorAll('.spotlight-card').forEach(card => {
       card.addEventListener('pointermove', (e) => {
         const rect = card.getBoundingClientRect();
@@ -3964,7 +2117,7 @@
       });
     });
 
-    // ================= 14. SCROLL REVEAL & STAGGER ANIMATIONS =================
+    // 14. Scroll Reveal & Stagger Animations
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -3978,7 +2131,7 @@
       revealObserver.observe(el);
     });
 
-    // ================= 15. STATS ANIMATED NUMBER COUNTERS =================
+    // 15. Stats Animated Number Counters
     let countersAnimated = false;
     const statsObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -4005,7 +2158,7 @@
     const heroSection = document.getElementById('hero');
     if (heroSection) statsObserver.observe(heroSection);
 
-    // ================= 16. INTERACTIVE PROJECT DETAIL MODAL =================
+    // 16. Interactive Project Detail Modal
     const projectsData = {
       ruangtenang: {
         title: "RuangTenang Kampus",
@@ -4047,6 +2200,45 @@
           "<strong>Interaksi Desain Modern:</strong> Dibuat dengan fondasi sistem desain modular dan responsif."
         ],
         github: "https://github.com/irsyadazaki77-beep/SiKaya"
+      },
+      uot: {
+        title: "UOT — Digital Learning Platform",
+        subtitle: "Interactive EdTech Platform Concept & Frontend Architecture",
+        icon: "book-open",
+        tags: ["HTML5 / CSS3", "Modern JavaScript", "Mobile-First Design", "EdTech"],
+        overview: "Platform pembelajaran digital dengan pengalaman belajar interaktif yang dirancang dengan orientasi kuat pada kenyamanan visual pengguna di perangkat ponsel pintar.",
+        highlights: [
+          "<strong>Mobile-First Interface:</strong> Slicing komponen layout presisi pixel-perfect dengan navigasi satu jempol.",
+          "<strong>Struktur Kode Semantik:</strong> Menerapkan standar aksesibilitas web W3C untuk kemudahan navigasi layar.",
+          "<strong>Performa Optimal:</strong> Pemuatan aset cepat tanpa ketergantungan library berat."
+        ],
+        github: "https://github.com/irsyadazaki77-beep/UOT"
+      },
+      omnitraf: {
+        title: "OmniTRAF Telemetry Dashboard",
+        subtitle: "Intelligent Traffic & Transit Monitoring Dashboard",
+        icon: "activity",
+        tags: ["Data Visualization", "Telemetry", "Dashboard UI", "Web & iOS"],
+        overview: "Sistem visualisasi data lalu lintas cerdas dan monitoring telemetry jaringan dengan pembaruan dinamis dan performa tinggi.",
+        highlights: [
+          "<strong>Monitoring Real-time:</strong> Visualisasi metrik throughput kendaraan, kecepatan rata-rata, dan status kepadatan jalur.",
+          "<strong>Desain Modular:</strong> Widget kartu analitik yang dapat dikustomisasi sesuai kebutuhan operator lalu lintas.",
+          "<strong>Dark Mode Optimized:</strong> Antarmuka dengan kontras tinggi yang nyaman untuk pengawasan 24/7."
+        ],
+        github: "https://github.com/irsyadazaki77-beep/omnitraf-ios-dashboard"
+      },
+      voxelverse: {
+        title: "Voxel-Verse 3D Sandbox",
+        subtitle: "Creative Computing & Interactive 3D Canvas",
+        icon: "box",
+        tags: ["WebGL", "JavaScript (ES6+)", "Creative Coding", "Game Mechanics"],
+        overview: "Eksplorasi kalkulasi fisika voxel 3D interaktif pada browser berbasis WebGL dan JavaScript dengan manipulasi world generation dinamis.",
+        highlights: [
+          "<strong>Procedural Generation:</strong> Perhitungan matematis koordinat blok voxel secara dinamis.",
+          "<strong>Interactive Raycasting:</strong> Interaksi kursor mouse langsung dengan objek 3D di viewport browser.",
+          "<strong>Optimasi Rendering:</strong> Pengurangan draw call untuk memastikan framerate 60 FPS yang stabil."
+        ],
+        github: "https://github.com/irsyadazaki77-beep/Voxel-Verse-V1"
       }
     };
 
@@ -4085,20 +2277,21 @@
         </a>
       `;
 
-      projectModal.classList.remove('hidden');
+      projectModal?.classList.remove('hidden');
       setTimeout(() => {
-        projectModal.classList.remove('opacity-0');
-        projectModalContent.classList.remove('scale-95');
-        projectModalContent.classList.add('scale-100');
+        projectModal?.classList.remove('opacity-0');
+        projectModalContent?.classList.remove('scale-95');
+        projectModalContent?.classList.add('scale-100');
         lucide.createIcons();
       }, 10);
       playClickSound(650, 0.05);
     }
 
     function closeProjectModal() {
+      if (!projectModal) return;
       projectModal.classList.add('opacity-0');
-      projectModalContent.classList.remove('scale-100');
-      projectModalContent.classList.add('scale-95');
+      projectModalContent?.classList.remove('scale-100');
+      projectModalContent?.classList.add('scale-95');
       setTimeout(() => {
         projectModal.classList.add('hidden');
       }, 300);
@@ -4108,19 +2301,20 @@
       if (e.target === projectModal) closeProjectModal();
     });
 
-    // ================= 17. IN-PAGE CERTIFICATE QUICK VIEWER MODAL =================
+    // 17. In-Page Certificate Quick Viewer Modal
     const certModal = document.getElementById('certModal');
     const certModalContent = document.getElementById('certModalContent');
     const modalCertFrame = document.getElementById('modalCertFrame');
     const modalCertImg = document.getElementById('modalCertImg');
 
     function openCertModal(title, issuer, filePath) {
+      if (!certModal) return;
       document.getElementById('modalCertTitle').textContent = title;
       document.getElementById('modalCertIssuer').textContent = issuer;
       document.getElementById('modalCertDownloadBtn').href = filePath;
       document.getElementById('modalCertExternalBtn').href = filePath;
 
-      if (filePath.endsWith('.pdf')) {
+      if (filePath.toLowerCase().endsWith('.pdf')) {
         modalCertFrame.src = filePath;
         modalCertFrame.classList.remove('hidden');
         modalCertImg.classList.add('hidden');
@@ -4133,21 +2327,22 @@
       certModal.classList.remove('hidden');
       setTimeout(() => {
         certModal.classList.remove('opacity-0');
-        certModalContent.classList.remove('scale-95');
-        certModalContent.classList.add('scale-100');
+        certModalContent?.classList.remove('scale-95');
+        certModalContent?.classList.add('scale-100');
         lucide.createIcons();
       }, 10);
       playClickSound(700, 0.05);
     }
 
     function closeCertModal() {
+      if (!certModal) return;
       certModal.classList.add('opacity-0');
-      certModalContent.classList.remove('scale-100');
-      certModalContent.classList.add('scale-95');
+      certModalContent?.classList.remove('scale-100');
+      certModalContent?.classList.add('scale-95');
       setTimeout(() => {
         certModal.classList.add('hidden');
-        modalCertFrame.src = '';
-        modalCertImg.src = '';
+        if (modalCertFrame) modalCertFrame.src = '';
+        if (modalCertImg) modalCertImg.src = '';
       }, 300);
     }
 
@@ -4163,31 +2358,31 @@
         const title = card ? (card.querySelector('h3, h4')?.textContent || 'Sertifikat Resmi') : 'Sertifikat Resmi';
         const issuer = card ? (card.querySelector('p')?.textContent || 'Dokumen Terverifikasi') : 'Dokumen Terverifikasi';
         
-        // Open modal
         e.preventDefault();
         openCertModal(title.trim(), issuer.trim(), href);
       });
     });
 
-    // ================= 18. DEVELOPER TERMINAL CLI CONTROLLER =================
+    // 18. Developer Terminal CLI Controller
     const terminalModal = document.getElementById('terminalModal');
     const terminalOutput = document.getElementById('terminalOutput');
     const terminalInput = document.getElementById('terminalInput');
 
     function toggleTerminalModal() {
+      if (!terminalModal) return;
       if (terminalModal.classList.contains('hidden')) {
         terminalModal.classList.remove('hidden');
         setTimeout(() => {
           terminalModal.classList.remove('opacity-0');
-          terminalModal.querySelector('div').classList.remove('scale-95');
-          terminalModal.querySelector('div').classList.add('scale-100');
-          terminalInput.focus();
+          terminalModal.querySelector('div')?.classList.remove('scale-95');
+          terminalModal.querySelector('div')?.classList.add('scale-100');
+          terminalInput?.focus();
         }, 10);
         playClickSound(900, 0.05);
       } else {
         terminalModal.classList.add('opacity-0');
-        terminalModal.querySelector('div').classList.remove('scale-100');
-        terminalModal.querySelector('div').classList.add('scale-95');
+        terminalModal.querySelector('div')?.classList.remove('scale-100');
+        terminalModal.querySelector('div')?.classList.add('scale-95');
         setTimeout(() => {
           terminalModal.classList.add('hidden');
         }, 300);
@@ -4223,6 +2418,7 @@
     });
 
     function executeTerminalCommand(cmd) {
+      if (!terminalOutput) return;
       const line = document.createElement('div');
       line.innerHTML = `<span class="text-emerald-400 font-bold">zaki@dev:~$</span> <span>${escapeHtml(cmd)}</span>`;
       terminalOutput.appendChild(line);
@@ -4351,12 +2547,11 @@
       if (e.key === 'Escape') {
         closeProjectModal();
         closeCertModal();
-        if (!terminalModal.classList.contains('hidden')) {
+        if (terminalModal && !terminalModal.classList.contains('hidden')) {
           toggleTerminalModal();
         }
       }
     });
-
   </script>
 </body>
 </html>
