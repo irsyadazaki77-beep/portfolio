@@ -22,7 +22,7 @@
   <meta property="twitter:description" content="Mahasiswa Sistem Informasi Telkom University Surabaya. Rekayasa Perangkat Lunak Full-Stack, Sistem AI, dan Strategi Data.">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ctext y=\'.9em\' font-size=\'90\'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -1721,7 +1721,7 @@
   <!-- Complete Interactive Scripts (Positioned right before closing body) -->
   <script>
     // 1. Initialize Lucide Icons
-    lucide.createIcons();
+    if (window.lucide) { lucide.createIcons(); }
 
     // 2. Dark / Light Mode with LocalStorage
     const themeToggleBtn = document.getElementById('themeToggle');
@@ -1742,7 +1742,7 @@
         localStorage.setItem('theme', 'light');
         showToast('Mode Terang diaktifkan');
       }
-      lucide.createIcons();
+      if (window.lucide) { lucide.createIcons(); }
     }
 
     themeToggleBtn?.addEventListener('click', toggleTheme);
@@ -2282,7 +2282,7 @@
         projectModal?.classList.remove('opacity-0');
         projectModalContent?.classList.remove('scale-95');
         projectModalContent?.classList.add('scale-100');
-        lucide.createIcons();
+        if (window.lucide) { lucide.createIcons(); }
       }, 10);
       playClickSound(650, 0.05);
     }
@@ -2329,7 +2329,7 @@
         certModal.classList.remove('opacity-0');
         certModalContent?.classList.remove('scale-95');
         certModalContent?.classList.add('scale-100');
-        lucide.createIcons();
+        if (window.lucide) { lucide.createIcons(); }
       }, 10);
       playClickSound(700, 0.05);
     }
@@ -2542,8 +2542,40 @@
       return div.innerHTML;
     }
 
-    // Universal ESC Key to close any active modal
+    // Terminal Modal Backdrop Click Listener
+    terminalModal?.addEventListener('click', (e) => {
+      if (e.target === terminalModal) {
+        toggleTerminalModal();
+      }
+    });
+
+    // Back to Top Button Controller
+    const backToTopBtn = document.getElementById('backToTopBtn');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 400) {
+        backToTopBtn?.classList.remove('opacity-0', 'pointer-events-none');
+        backToTopBtn?.classList.add('opacity-100');
+      } else {
+        backToTopBtn?.classList.add('opacity-0', 'pointer-events-none');
+        backToTopBtn?.classList.remove('opacity-100');
+      }
+    }, { passive: true });
+
+    backToTopBtn?.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      playClickSound(750, 0.04);
+    });
+
+    // Global Keyboard Shortcuts (Escape to close modals, ` or Ctrl+K to toggle terminal)
     window.addEventListener('keydown', (e) => {
+      // Toggle developer terminal via ` or Ctrl+K
+      if ((e.key === '`' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) || 
+          (e.ctrlKey && e.key.toLowerCase() === 'k')) {
+        e.preventDefault();
+        toggleTerminalModal();
+        return;
+      }
+
       if (e.key === 'Escape') {
         closeProjectModal();
         closeCertModal();
