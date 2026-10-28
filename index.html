@@ -25,9 +25,65 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 
   <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com">
+    // 9. Certificate Filtering Logic
+    const certFilterButtons = document.querySelectorAll('.cert-filter-btn');
+    const certCards = document.querySelectorAll('.cert-card');
+
+    certFilterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        certFilterButtons.forEach(b => {
+          b.classList.remove('active', 'bg-brand-600', 'text-white');
+          b.classList.add('text-slate-600', 'dark:text-slate-300');
+        });
+
+        btn.classList.add('active', 'bg-brand-600', 'text-white');
+        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
+
+        const filterValue = btn.getAttribute('data-cert-filter');
+
+        certCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filterValue === 'all' || category === filterValue) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+  </script>
   <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/lucide@latest">
+    // 9. Certificate Filtering Logic
+    const certFilterButtons = document.querySelectorAll('.cert-filter-btn');
+    const certCards = document.querySelectorAll('.cert-card');
+
+    certFilterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        certFilterButtons.forEach(b => {
+          b.classList.remove('active', 'bg-brand-600', 'text-white');
+          b.classList.add('text-slate-600', 'dark:text-slate-300');
+        });
+
+        btn.classList.add('active', 'bg-brand-600', 'text-white');
+        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
+
+        const filterValue = btn.getAttribute('data-cert-filter');
+
+        certCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filterValue === 'all' || category === filterValue) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+  </script>
   <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,6 +133,34 @@
         }
       }
     }
+  
+    // 9. Certificate Filtering Logic
+    const certFilterButtons = document.querySelectorAll('.cert-filter-btn');
+    const certCards = document.querySelectorAll('.cert-card');
+
+    certFilterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        certFilterButtons.forEach(b => {
+          b.classList.remove('active', 'bg-brand-600', 'text-white');
+          b.classList.add('text-slate-600', 'dark:text-slate-300');
+        });
+
+        btn.classList.add('active', 'bg-brand-600', 'text-white');
+        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
+
+        const filterValue = btn.getAttribute('data-cert-filter');
+
+        certCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filterValue === 'all' || category === filterValue) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
   </script>
   
   <style>
@@ -193,6 +277,7 @@
         <a href="#keahlian" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Keahlian</a>
         <a href="#proyek" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Proyek</a>
         <a href="#pengalaman" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Pengalaman</a>
+        <a href="#prestasi" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Prestasi</a>
         <a href="#sertifikasi" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Sertifikasi</a>
         <a href="#kontak" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Kontak</a>
       </div>
@@ -240,6 +325,7 @@
       <a href="#keahlian" class="mobile-nav-link py-2 px-3 rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50">Keahlian</a>
       <a href="#proyek" class="mobile-nav-link py-2 px-3 rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50">Proyek</a>
       <a href="#pengalaman" class="mobile-nav-link py-2 px-3 rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50">Pengalaman</a>
+      <a href="#prestasi" class="mobile-nav-link py-2 px-3 rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50">Prestasi</a>
       <a href="#sertifikasi" class="mobile-nav-link py-2 px-3 rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50">Sertifikasi</a>
       <a href="#kontak" class="mobile-nav-link py-2 px-3 rounded-xl hover:bg-slate-200/50 dark:hover:bg-slate-800/50">Kontak</a>
       <div class="pt-2 border-t border-slate-200 dark:border-slate-800 flex gap-2">
@@ -329,9 +415,13 @@
             <div class="font-display text-3xl font-black text-slate-900 dark:text-white">AI Systems</div>
             <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Gemini API & SSE Stream</div>
           </div>
-          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
-            <div class="font-display text-3xl font-black text-slate-900 dark:text-white">13+ Sertifikat</div>
-            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">Komdigi, MS & Dicoding</div>
+          <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-amber-500/30 dark:border-amber-500/30 shadow-sm backdrop-blur-sm relative overflow-hidden group">
+            <div class="absolute -right-2 -bottom-2 w-12 h-12 bg-amber-500/10 rounded-full blur-md"></div>
+            <div class="font-display text-3xl font-black text-amber-500 flex items-center gap-1.5">
+              <span>Juara 1</span>
+              <i data-lucide="trophy" class="w-6 h-6 text-amber-500 inline"></i>
+            </div>
+            <div class="text-xs text-slate-600 dark:text-slate-300 mt-1 font-medium">BCC INSIGHT 2025</div>
           </div>
           <div class="p-5 rounded-2xl bg-white/70 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 shadow-sm backdrop-blur-sm">
             <div class="font-display text-3xl font-black text-slate-900 dark:text-white">Security</div>
@@ -920,122 +1010,521 @@
       </div>
     </section>
 
-    <!-- Lisensi & Sertifikasi (13+ Credential) -->
-    <section id="sertifikasi" class="py-24">
+        <!-- Prestasi & Penghargaan Kompetisi -->
+    <section id="prestasi" class="py-24 border-t border-slate-200 dark:border-slate-800/80 relative">
       <div class="max-w-5xl mx-auto px-6">
+        
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <span class="text-brand-600 dark:text-brand-400 text-xs font-bold uppercase tracking-wider">Kredensial Profesional</span>
-          <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-2">Lisensi & Sertifikasi</h2>
-          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Sertifikasi resmi dari Kementerian Komunikasi dan Digital (Komdigi), Microsoft, Dicoding, dan ITS.</p>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">
+            <i data-lucide="trophy" class="w-4 h-4"></i>
+            <span>Honors & Competition Achievements</span>
+          </div>
+          <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-1">Prestasi & Kompetisi Nasional</h2>
+          <p class="text-slate-600 dark:text-slate-400 text-sm mt-2">Rekam jejak kompetitif dalam bidang Business Case, Business Model Canvas, dan Inovasi Teknologi.</p>
         </div>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Highlight Juara 1 Card -->
+        <div class="mb-10 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-transparent border-2 border-amber-500/40 shadow-xl relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+            <div class="flex items-start gap-5">
+              <div class="w-16 h-16 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0 shadow-lg shadow-amber-500/30">
+                <i data-lucide="trophy" class="w-8 h-8"></i>
+              </div>
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                  <span class="px-3 py-1 rounded-full bg-amber-500 text-white text-xs font-black tracking-wide uppercase shadow-sm">
+                    🥇 JUARA 1 NASIONAL
+                  </span>
+                  <span class="text-xs font-mono font-semibold text-amber-600 dark:text-amber-400">Tingkat Mahasiswa • Sep 2025</span>
+                </div>
+                <h3 class="font-display text-2xl font-black text-slate-900 dark:text-white leading-tight">
+                  Business Case Competition INSIGHT 2025
+                </h3>
+                <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-1">
+                  Himpunan Mahasiswa Sistem Informasi (HMSI) • Telkom University Surabaya
+                </p>
+                <p class="text-sm text-slate-700 dark:text-slate-300 mt-3 leading-relaxed max-w-2xl">
+                  Meraih Juara 1 dengan mengangkat solusi inovasi strategis bertema <em>"Lead & Empower: Gen Z ada untuk UMKM Unggul"</em>. Mengembangkan kerangka transformasi digital dan strategi pertumbuhan terukur untuk UMKM lokal.
+                </p>
+              </div>
+            </div>
+            <div class="shrink-0 flex sm:flex-col gap-2.5">
+              <a href="certificates/Juara-1-BCC-INSIGHT-Telkom-University.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md shadow-amber-500/25 transition-all">
+                <i data-lucide="file-check-2" class="w-4 h-4"></i>
+                <span>Buka Sertifikat (PDF)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid Semi-Finalists & National Competitions -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           
-          <!-- Cert 1 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center shrink-0">
-              <i data-lucide="award" class="w-5 h-5"></i>
-            </div>
+          <!-- Card Semi-Finalist 1: YED UI -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">Associate Data Scientist + Python</h4>
-              <p class="text-xs text-slate-500 mt-1">Digital Talent Academy, Komdigi</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Apr 2026 • 31 Jam</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-black uppercase tracking-wider">
+                  🥈 SEMI-FINALIS
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">Nov - Des 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-1">
+                YED UI Business Plan Competition
+              </h4>
+              <p class="text-xs text-brand-600 dark:text-brand-400 font-semibold mb-2">BEM FMIPA Universitas Indonesia (UI)</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Berhasil lolos ke tahap Semifinal tingkat mahasiswa nasional dalam kompetisi perencanaan bisnis dan validasi produk yang diselenggarakan oleh Universitas Indonesia.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+              <a href="certificates/Semifinalis-YED-Universitas-Indonesia.jpg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                <span>Lihat Sertifikat YED UI</span>
+              </a>
             </div>
           </div>
 
-          <!-- Cert 2 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
-              <i data-lucide="award" class="w-5 h-5"></i>
-            </div>
+          <!-- Card Semi-Finalist 2: DIGITOPIA FAIR 4.0 -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">Data Scientist Supervisor</h4>
-              <p class="text-xs text-slate-500 mt-1">Digital Talent Academy, Komdigi</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Mei 2026 • 20 Jam</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 text-[10px] font-black uppercase tracking-wider">
+                  🥈 SEMI-FINALIS
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">Juni 2026</span>
+              </div>
+              <h4 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-1">
+                Business Model Canvas DIGITOPIA 4.0
+              </h4>
+              <p class="text-xs text-cyan-600 dark:text-cyan-400 font-semibold mb-2">Telkom University Surabaya</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Mencapai babak Semi Final pada kompetisi BMC DIGITOPIA FAIR 4.0 atas inovasi dan perancangan model bisnis teknologi yang berdampak.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+              <a href="certificates/Semifinalis-DIGITOPIA-FAIR-Telkom-University.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-600 dark:text-cyan-400 hover:underline">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                <span>Lihat Sertifikat DIGITOPIA</span>
+              </a>
             </div>
           </div>
 
-          <!-- Cert 3 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
-              <i data-lucide="cloud" class="w-5 h-5"></i>
-            </div>
+          <!-- Card Semi-Finalist 3: IMAGEPRENEUR UPI -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">Microsoft Fabric & Azure Fundamentals</h4>
-              <p class="text-xs text-slate-500 mt-1">Komdigi & Microsoft</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Mei 2026 • 17 Jam</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-pink-500/10 text-pink-600 dark:text-pink-400 text-[10px] font-black uppercase tracking-wider">
+                  🥈 SEMI-FINALIS
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">Desember 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-1">
+                IMAGEPRENEUR 2025 — Tech for Change
+              </h4>
+              <p class="text-xs text-pink-600 dark:text-pink-400 font-semibold mb-2">Universitas Pendidikan Indonesia (UPI)</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Semifinalis tim Kacamata Usang pada kompetisi inovasi bisnis berkelanjutan: <em>"Driving Sustainable Innovation Towards a Better Future"</em>.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+              <a href="certificates/Semifinalis-IMAGEPRENEUR-UPI.png" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold text-pink-600 dark:text-pink-400 hover:underline">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                <span>Lihat Sertifikat IMAGEPRENEUR</span>
+              </a>
             </div>
           </div>
 
-          <!-- Cert 4 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-              <i data-lucide="bot" class="w-5 h-5"></i>
-            </div>
+          <!-- Card Competitor 4: D-Techtion Tel-U Bandung -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">AI Engineer For Milenial</h4>
-              <p class="text-xs text-slate-500 mt-1">Digital Talent Scholarship, Komdigi</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Nov 2025</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-wider">
+                  🎯 ESSAY NASIONAL
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">November 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-1">
+                National Essay D-Techtion 2025
+              </h4>
+              <p class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mb-2">FEB Telkom University Bandung</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Gagasan inovatif esai: <em>"Empowering Financial Inclusion with Cryptocurrency: Navigating Opportunities in the Digital Economy"</em>.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+              <a href="certificates/D-Techtion-Telkom-University-Bandung.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                <span>Lihat Sertifikat D-Techtion</span>
+              </a>
             </div>
           </div>
 
-          <!-- Cert 5 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-              <i data-lucide="brain" class="w-5 h-5"></i>
-            </div>
+          <!-- Card Competitor 5: TDC Summit Fest ITS -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">Implementasi Kecerdasan Artifisial</h4>
-              <p class="text-xs text-slate-500 mt-1">Digital Talent Scholarship, Komdigi</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Des 2025</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-black uppercase tracking-wider">
+                  🎯 BUSINESS PLAN
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">Oktober 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-1">
+                TDC Summit Fest 2025
+              </h4>
+              <p class="text-xs text-purple-600 dark:text-purple-400 font-semibold mb-2">Institut Teknologi Sepuluh Nopember (ITS)</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Partisipasi kompetisi Business Plan nasional di ITS, pondasi pengembangan studi kasus keberlanjutan energi jaringan AI ImpactGrid.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+              <a href="certificates/TDC-Summit-Fest-ITS.png" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                <span>Lihat Sertifikat TDC ITS</span>
+              </a>
             </div>
           </div>
 
-          <!-- Cert 6 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0">
-              <i data-lucide="shield-alert" class="w-5 h-5"></i>
-            </div>
+          <!-- Card Competitor 6: International Youth Innovation Summit -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col justify-between">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">Cyber Security & Career Awareness</h4>
-              <p class="text-xs text-slate-500 mt-1">Komdigi</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Des 2025</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-black uppercase tracking-wider">
+                  🌍 PROGRAM GLOBAL
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">Agt - Des 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-lg text-slate-900 dark:text-white mb-1">
+                International Youth Innovation Summit
+              </h4>
+              <p class="text-xs text-amber-600 dark:text-amber-400 font-semibold mb-2">Global Youthpreneur Nusantara & FES</p>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
+                Peserta seleksi delegasi pemuda internasional dalam program inovasi dan kepemimpinan kewirausahaan global.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+              <a href="certificates/International-Youth-Innovation-Summit.jpg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-bold text-amber-600 dark:text-amber-400 hover:underline">
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                <span>Lihat Sertifikat Global Summit</span>
+              </a>
             </div>
           </div>
 
-          <!-- Cert 7 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
-              <i data-lucide="terminal" class="w-5 h-5"></i>
-            </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Lisensi & Sertifikasi Profesional Terverifikasi (Filterable) -->
+    <section id="sertifikasi" class="py-24 bg-slate-100/60 dark:bg-slate-900/40 border-t border-slate-200 dark:border-slate-800/80">
+      <div class="max-w-5xl mx-auto px-6">
+        
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <span class="text-brand-600 dark:text-brand-400 text-xs font-bold uppercase tracking-wider">Kredensial & Pelatihan Terverifikasi</span>
+            <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mt-1">Lisensi & Sertifikasi Resmi</h2>
+            <p class="text-slate-600 dark:text-slate-400 text-sm mt-1">Dikeluarkan oleh Kementerian Komunikasi & Digital (Komdigi), Microsoft, Dicoding, dan ITS.</p>
+          </div>
+
+          <!-- Category Filter Buttons for Certs -->
+          <div class="flex flex-wrap gap-1.5 p-1.5 rounded-2xl glassmorphism border border-slate-200 dark:border-slate-800" id="certFilterContainer">
+            <button data-cert-filter="all" class="cert-filter-btn active px-3.5 py-1.5 text-xs font-bold rounded-xl bg-brand-600 text-white transition-all">Semua</button>
+            <button data-cert-filter="ai-data" class="cert-filter-btn px-3.5 py-1.5 text-xs font-medium rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all">AI & Data Science</button>
+            <button data-cert-filter="cloud-software" class="cert-filter-btn px-3.5 py-1.5 text-xs font-medium rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all">Cloud & Project</button>
+            <button data-cert-filter="security" class="cert-filter-btn px-3.5 py-1.5 text-xs font-medium rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all">Keamanan & Privasi</button>
+            <button data-cert-filter="leadership" class="cert-filter-btn px-3.5 py-1.5 text-xs font-medium rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 transition-all">Leadership</button>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" id="certGrid">
+          
+          <!-- Cert 1: Associate Data Scientist -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="ai-data">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">Programming Certificate</h4>
-              <p class="text-xs text-slate-500 mt-1">Prodistik ITS</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">2025</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-bold">DATA SCIENCE</span>
+                <span class="text-[10px] font-mono text-slate-400">Apr 2026 • 31 Jam</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Associate Data Scientist + Python</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Digital Talent Academy, Komdigi</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Python</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Pandas</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Scikit-Learn</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Data Cleansing</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Sertifikat Resmi BSSN</span>
+              <a href="certificates/Associate-Data-Scientist-Komdigi.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
             </div>
           </div>
 
-          <!-- Cert 8 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0">
-              <i data-lucide="code" class="w-5 h-5"></i>
-            </div>
+          <!-- Cert 2: Data Scientist Supervisor -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="ai-data">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">Basic AI Certificate</h4>
-              <p class="text-xs text-slate-500 mt-1">Dicoding Indonesia</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">2025 — 2028</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-purple-500/10 text-purple-600 dark:text-purple-400 text-[10px] font-bold">DATA SCIENCE</span>
+                <span class="text-[10px] font-mono text-slate-400">Mei 2026 • 20 Jam</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Data Scientist Supervisor - Nasional</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Digital Talent Academy, Komdigi</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Data Screening</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Model Strategy</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Model Evaluation</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Sertifikat Resmi BSSN</span>
+              <a href="certificates/Data-Scientist-Supervisor-Komdigi.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
             </div>
           </div>
 
-          <!-- Cert 9 -->
-          <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex items-start gap-4 hover:border-brand-500/40 transition-colors">
-            <div class="w-10 h-10 rounded-xl bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
-              <i data-lucide="lock" class="w-5 h-5"></i>
-            </div>
+          <!-- Cert 3: Microsoft Fabric & Azure Fundamentals -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="cloud-software">
             <div>
-              <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white leading-snug">Perlindungan Data Pribadi</h4>
-              <p class="text-xs text-slate-500 mt-1">Komdigi</p>
-              <span class="inline-block mt-2 text-[10px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Des 2025</span>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 text-[10px] font-bold">CLOUD & AI</span>
+                <span class="text-[10px] font-mono text-slate-400">Mei 2026 • 17 Jam</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Fundamental Microsoft Fabric & Azure</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Komdigi & Microsoft</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Microsoft Azure</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Microsoft Fabric</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Gen AI Apps</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Microsoft Partner</span>
+              <a href="certificates/Microsoft-Fabric-Azure-Komdigi.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 4: Belajar Dasar AI Dicoding -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="ai-data">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-bold">ARTIFICIAL INTELLIGENCE</span>
+                <span class="text-[10px] font-mono text-slate-400">2025 - 2028 • 10 Jam</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Belajar Dasar AI</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Dicoding Indonesia</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Machine Learning</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Deep Learning</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Data for AI</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">ID: GRX5JWY9KX0M</span>
+              <a href="certificates/Belajar-Dasar-AI-Dicoding.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 5: Dasar Keamanan AI Microsoft -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="ai-data">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-bold">AI SECURITY</span>
+                <span class="text-[10px] font-mono text-slate-400">Desember 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Dasar-dasar Keamanan AI</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pusbang Ekosistem SDM Komdigi & Microsoft</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">AI Safety</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Model Vulnerability</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Responsible AI</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Terverifikasi BSrE</span>
+              <a href="certificates/Dasar-Keamanan-AI-Microsoft-Komdigi.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 6: AI Engineer For Milenial -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="ai-data">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold">PROMPT ENGINEERING</span>
+                <span class="text-[10px] font-mono text-slate-400">November 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">AI Engineer For Milenial</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Digital Talent Scholarship, Komdigi</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Prompting</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">AI Productivity</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">LLM Interaction</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Terverifikasi BSrE</span>
+              <a href="certificates/AI-Engineer-For-Milenial-Komdigi.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 7: Analisis Data Excel Microsoft -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="cloud-software">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold">DATA ANALYTICS</span>
+                <span class="text-[10px] font-mono text-slate-400">Desember 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Sertifikat Analisis Data Excel</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Microsoft Skills for Jobs</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Pivot Tables</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Data Modeling</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Statistical Analysis</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Microsoft Skills for Jobs</span>
+              <a href="certificates/Analisis-Data-Excel-Microsoft.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 8: Project Management Microsoft -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="cloud-software">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-bold">PROJECT MANAGEMENT</span>
+                <span class="text-[10px] font-mono text-slate-400">Desember 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Jago Project Management dari Nol</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Microsoft Skills for Jobs</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Agile / Scrum</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Risk Mitigation</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Stakeholder Management</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Microsoft Skills for Jobs</span>
+              <a href="certificates/Project-Management-Microsoft.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 9: Introduction to Cyber Security -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="security">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold">CYBER SECURITY</span>
+                <span class="text-[10px] font-mono text-slate-400">Desember 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Cyber Security & Career Awareness</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pusat Pengembangan Literasi Digital Komdigi</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Network Defense</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Threat Intelligence</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Security Roles</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Terverifikasi BSrE</span>
+              <a href="certificates/Cyber-Security-Komdigi.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 10: Ethical Hacker For Dummies -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="security">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-rose-500/10 text-rose-600 dark:text-rose-400 text-[10px] font-bold">ETHICAL HACKING</span>
+                <span class="text-[10px] font-mono text-slate-400">November 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Ethical Hacker For Dummies</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Digital Talent Scholarship, Komdigi</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Pentesting</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Vulnerability Assessment</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Security Ethics</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Terverifikasi BSrE</span>
+              <a href="certificates/Ethical-Hacker-Komdigi.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 11: Perlindungan Data Pribadi -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="security">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-teal-500/10 text-teal-600 dark:text-teal-400 text-[10px] font-bold">DATA PRIVACY</span>
+                <span class="text-[10px] font-mono text-slate-400">Desember 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Kenali dan Lindungi Data Pribadi</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Digital Talent Scholarship, Komdigi</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">UU PDP</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">PII Protection</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Security Best Practices</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-emerald-500">✓ Terverifikasi BSrE</span>
+              <a href="certificates/Perlindungan-Data-Pribadi-Komdigi.pdf" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka PDF</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cert 12: Fundamental Public Speaking Training -->
+          <div class="cert-card p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm flex flex-col justify-between hover:border-brand-500/40 transition-all" data-category="leadership">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 text-[10px] font-bold">COMMUNICATION</span>
+                <span class="text-[10px] font-mono text-slate-400">Desember 2025</span>
+              </div>
+              <h4 class="font-display font-bold text-base text-slate-900 dark:text-white leading-snug">Fundamental Public Speaking Training</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Grow Insight x Future Entrepreneur Summit</p>
+              <div class="flex flex-wrap gap-1 mt-3">
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Pitching</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Persuasive Talk</span>
+                <span class="px-2 py-0.5 text-[9px] rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">Leadership Communication</span>
+              </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <span class="text-[10px] font-mono text-amber-500">Tingkat Nasional</span>
+              <a href="certificates/Public-Speaking-Training-FES.jpg" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline">
+                <span>Buka Sertifikat</span>
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+              </a>
             </div>
           </div>
 
@@ -1286,6 +1775,34 @@
     if (typewriterElement) {
       setTimeout(typeEffect, 800);
     }
+  
+    // 9. Certificate Filtering Logic
+    const certFilterButtons = document.querySelectorAll('.cert-filter-btn');
+    const certCards = document.querySelectorAll('.cert-card');
+
+    certFilterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        certFilterButtons.forEach(b => {
+          b.classList.remove('active', 'bg-brand-600', 'text-white');
+          b.classList.add('text-slate-600', 'dark:text-slate-300');
+        });
+
+        btn.classList.add('active', 'bg-brand-600', 'text-white');
+        btn.classList.remove('text-slate-600', 'dark:text-slate-300');
+
+        const filterValue = btn.getAttribute('data-cert-filter');
+
+        certCards.forEach(card => {
+          const category = card.getAttribute('data-category');
+          if (filterValue === 'all' || category === filterValue) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
   </script>
 </body>
 </html>

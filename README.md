@@ -18,11 +18,23 @@ Website portofolio profesional dan interaktif yang merefleksikan profil lengkap 
 
 ---
 
+## 🏆 Prestasi & Kompetisi Nasional Unggulan
+- 🥇 **JUARA 1 NASIONAL** — *Business Case Competition INSIGHT 2025* (HMSI Telkom University Surabaya, Sep 2025)
+- 🥈 **SEMI-FINALIS** — *YED UI 2025 Business Plan Competition* (BEM FMIPA Universitas Indonesia)
+- 🥈 **SEMI-FINALIS** — *Business Model Canvas DIGITOPIA FAIR 4.0 2026* (Telkom University Surabaya)
+- 🥈 **SEMI-FINALIS** — *IMAGEPRENEUR 2025* (Universitas Pendidikan Indonesia)
+- 🎯 **Peserta Kompetisi Nasional**:
+  - *National Essay Competition D-Techtion 2025* (FEB Telkom University Bandung)
+  - *TDC Summit Fest 2025 Business Plan* (TDC ITS Surabaya)
+  - *International Youth Innovation Summit Selection Program 2025* (Global Youthpreneur Nusantara & FES)
+
+---
+
 ## ✨ Proyek Unggulan
 
 1. **RuangTenang Kampus** — Platform Kesehatan Mental & Konseling Mahasiswa Berbasis AI (Production-Ready)
    - React 19, TypeScript, Express.js, Prisma ORM, SQLite/PostgreSQL.
-   - Asisten AI reflektif (CBT) bertenaga Gemini API (@google/genai) via server-side proxy & SSE streaming.
+   - Asisten AI reflektif (CBT) bertenaga Gemini API (`@google/genai`) via server-side proxy & SSE streaming.
    - Arsitektur privasi Privacy by Design: PII scrubbing otomatis, deteksi krisis multi-lapis, dan enkripsi data sensitif AES-256-GCM.
    - Skrining klinis PHQ-9 & GAD-7 mandiri.
 2. **ImpactGrid** — AI-Powered Network Sustainability Decision Support System
@@ -36,15 +48,21 @@ Website portofolio profesional dan interaktif yang merefleksikan profil lengkap 
 
 ---
 
-## 🏆 Kredensial & Sertifikasi
-- **Associate Data Scientist + Python** — Digital Talent Academy, Komdigi (31 Jam)
-- **Data Scientist Supervisor** — Digital Talent Academy, Komdigi (20 Jam)
-- **Microsoft Fabric & Azure Fundamentals** — Komdigi & Microsoft (17 Jam)
-- **AI Engineer For Milenial** — Komdigi
-- **Implementasi Kecerdasan Artifisial** — Komdigi
-- **Cyber Security & Career Awareness** — Komdigi
-- **Programming Certificate** — Prodistik ITS
-- **Basic AI Certificate** — Dicoding Indonesia
+## 📜 Lisensi & Sertifikasi Profesional Terverifikasi
+- **Associate Data Scientist + Python (Nasional)** — Digital Talent Academy, Komdigi (31 Jam)
+- **Data Scientist Supervisor (Nasional)** — Digital Talent Academy, Komdigi (20 Jam)
+- **Fundamental of Microsoft Fabric & Azure (Nasional)** — Komdigi & Microsoft (17 Jam)
+- **Belajar Dasar AI** — Dicoding Indonesia (ID: `GRX5JWY9KX0M`, 10 Jam)
+- **Dasar-dasar Keamanan AI** — Pusbang Ekosistem SDM Komdigi & Microsoft
+- **AI Engineer For Milenial** — Digital Talent Scholarship, Komdigi
+- **Sertifikat Analisis Data Excel** — Microsoft Skills for Jobs
+- **Jago Project Management dari Nol** — Microsoft Skills for Jobs
+- **Introduction to Cyber Security and Career Awareness** — Komdigi
+- **Ethical Hacker For Dummies** — Komdigi
+- **Kenali dan Lindungi Data Pribadi** — Komdigi
+- **Fundamental Public Speaking Training** — Grow Insight x FES Management
+
+*Seluruh dokumen sertifikat tersimpan dan dapat diverifikasi langsung melalui folder `certificates/`.*
 
 ---
 
