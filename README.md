@@ -24,9 +24,10 @@ Website portofolio profesional, modern, dan highly interactive yang merefleksika
 - 🎴 **Subtle 3D Perspective Tilt**: Efek kemiringan 3D halus saat kartu disorot dengan mouse.
 - 📊 **Scroll Reading Progress Bar**: Indikator persentase pembacaan halaman di bagian paling atas layar.
 - 🔢 **Animated Stats Counter**: Angka statistik beranimasi menghitung naik (*count-up*) saat di-scroll ke viewport.
-- 🪟 **Interactive Project Deep-Dive Modal**: Modal detail arsitektur, tantangan teknis, dan solusi tanpa harus meninggalkan halaman web.
-- 📜 **In-Page Certificate Viewer Modal**: Pratinjau langsung sertifikat resmi (PDF/JPG) dengan tombol unduh dan buka layar penuh.
-- 💻 **Developer Terminal CLI Easter-Egg (`>_ Terminal Zaki`)**: Terminal interaktif di pojok kanan bawah yang mendukung perintah `help`, `about`, `skills`, `projects`, `awards`, `certs`, `contact`, dan `sudo hire`!
+- 🪟 **Interactive Project Deep-Dive Modal**: Pratinjau UI screenshot 16:9, detail arsitektur, tantangan teknis, dan solusi tanpa meninggalkan halaman web.
+- 📜 **In-Page CV & Certificate Viewer Modal**: Pratinjau langsung CV ATS (ID & EN) serta sertifikat resmi (PDF/JPG/PNG) dengan tombol unduh dan buka layar penuh.
+- 🌐 **Bilingual `ID / EN` Switcher**: Pergantian bahasa instan (Bahasa Indonesia & English) di navbar tersimpan di `localStorage`, sekaligus menyesuaikan berkas CV ATS.
+- 💻 **Developer Terminal CLI Easter-Egg (`>_ Terminal Zaki`)**: Terminal interaktif di pojok kanan bawah yang mendukung perintah `help`, `about`, `skills`, `projects`, `awards`, `certs`, `cv`, `contact`, dan `sudo hire`!
 - 🔊 **Micro-Audio Feedback**: Efek suara sintetis klik halus (Web Audio API) dengan tombol toggle suara on/off di navbar.
 
 ---
@@ -45,7 +46,7 @@ Website portofolio profesional, modern, dan highly interactive yang merefleksika
 
 ## ✨ Proyek Unggulan
 1. **[RuangLABmu](https://github.com/irsyadazaki77-beep/RuangLABmu)** — Laboratorium Sains Virtual 3D WebGL (28 Modul Fisika, Kimia, Biologi & Astronomi), Solver RK4 60Hz, Mentor AI Sokratik + Vision (`Dr. LabMu`), Room PIN WebSocket & LMS
-2. **[RuangTenang Kampus v4.0](https://github.com/irsyadazaki77-beep/RuangTenang)** ([Live Demo](https://ruang-tenang-blond.vercel.app)) — Ekosistem Kesehatan Mental AI CBT (Gemini & Ollama Offline), RuangKerja Artifact Studio, Voice Defense Simulator & Enkripsi AES-256-GCM
+2. **[RuangTenang Kampus v4.0](https://github.com/irsyadazaki77-beep/RuangTenang)** — Ekosistem Kesehatan Mental AI CBT (Gemini & Ollama Offline), RuangKerja Artifact Studio, Voice Defense Simulator & Enkripsi AES-256-GCM
 3. **[RuangPintar Edge](https://github.com/irsyadazaki77-beep/RuangPIntar)** — LMS Terdesentralisasi Offline-First Wilayah 3T Berbasis WebRTC P2P Mesh (`RPE1` 0 KB Kuota ISP), Single-Gateway AI + SQLite WAL Semantic Cache, Sneakernet USB & 6 Simulasi Vokasi
 4. **[ImpactGrid v1.0.0-rc1](https://github.com/irsyadazaki77-beep/impactgrid-prototype)** — Telkomsel RAN Autonomous Energy Operations Suite & DSS (O-RAN Non-RT RIC rApp, Fail-Safe 112 Drill <3d, Digital Twin, Peta GIS 38 Provinsi, SAP S/4HANA & GRI 302/305)
 5. **[SiKaya](https://github.com/irsyadazaki77-beep/SiKaya)** ([Live Demo](https://si-kaya-eta.vercel.app)) — Platform Edukasi Investasi & Analitik Portofolio Multi-Aset Berstandar Produksi (Trading Arena, Gemini Voice AI Advisor, Zero-Trust Firestore Rules & Ekspor PDF/Excel)
@@ -70,8 +71,10 @@ Website portofolio profesional, modern, dan highly interactive yang merefleksika
 
 ---
 
-## 📬 Kontak
+## 📬 Kontak & CV
+- **LinkedIn:** [Zaki Irsyada Putra](https://www.linkedin.com/in/zaki-irsyada-putra-23870a29b)
 - **Email:** [irsyadazaki77@gmail.com](mailto:irsyadazaki77@gmail.com)
 - **WhatsApp:** [+62 821-9806-9550](https://wa.me/6282198069550)
 - **GitHub:** [@irsyadazaki77-beep](https://github.com/irsyadazaki77-beep)
+- **CV ATS (ID & EN):** Tersedia di repositori ([ID PDF](CV_Zaki_Irsyada_Putra.pdf) | [EN PDF](CV_Zaki_Irsyada_Putra_EN.pdf))
 - **Lokasi:** Surabaya, Jawa Timur & Timika, Papua Tengah
