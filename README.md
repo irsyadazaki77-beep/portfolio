@@ -38,7 +38,11 @@ Website portofolio profesional, modern, dan highly interactive yang merefleksika
 - 🥈 **SEMI-FINALIS** — *Business Model Canvas DIGITOPIA FAIR 4.0 2026* (Telkom University Surabaya)
 - 🥈 **SEMI-FINALIS** — *IMAGEPRENEUR 2025* (Universitas Pendidikan Indonesia)
 - 🎯 **Peserta Kompetisi Nasional**:
+  - *Innovate Fest 2025 — BMC Competition* (Tim Keyboard Berdebu, Telkom University Surabaya)
+  - *National Ercom Competition (NEON) 2025 — Essay IoT* (Fakultas Teknik Universitas Bengkulu)
+  - *SIGMA 2.0 National Competition* (TSA Universitas Diponegoro)
   - *National Essay Competition D-Techtion 2025* (FEB Telkom University Bandung)
+  - *Futurepreneur National Competition (Business Plan)* (Future Entrepreneur Summit)
   - *TDC Summit Fest 2025 Business Plan* (TDC ITS Surabaya)
   - *International Youth Innovation Summit Selection Program 2025* (Global Youthpreneur Nusantara & FES)
 
@@ -60,14 +64,16 @@ Website portofolio profesional, modern, dan highly interactive yang merefleksika
 ## 📜 Lisensi & Sertifikasi Profesional Terverifikasi
 - **Associate Data Scientist + Python (Nasional)** — Komdigi (31 Jam)
 - **Data Scientist Supervisor (Nasional)** — Komdigi (20 Jam)
+- **Cloud Essentials (CA - DEX - AWS) — Nasional** — Komdigi Digital Talent Academy (8 Jam)
+- **Intermediate & Fundamental Associate Network Administrator — Nasional** — Komdigi Digital Talent Academy (24 Jam total)
 - **Fundamental of Microsoft Fabric & Azure (Nasional)** — Komdigi & Microsoft (17 Jam)
+- **Database Security in Practice — Hackathon #4** — PUSTEKINFO Sekretariat Jenderal DPR RI & Onno Center International
 - **Belajar Dasar AI** — Dicoding Indonesia (ID: `GRX5JWY9KX0M`)
-- **Dasar-dasar Keamanan AI** — Komdigi & Microsoft
+- **Dasar-dasar Keamanan AI & Implementasi Kecerdasan Artifisial** — Komdigi & Microsoft
 - **AI Engineer For Milenial** — Komdigi
 - **Sertifikat Analisis Data Excel & Project Management** — Microsoft Skills for Jobs
-- **Cyber Security Awareness & Ethical Hacking** — Komdigi
-- **Kenali dan Lindungi Data Pribadi** — Komdigi (UU PDP)
-- **Fundamental Public Speaking Training** — Grow Insight x FES Management
+- **Cyber Security Awareness, Ethical Hacking & Perlindungan Data Pribadi (UU PDP)** — Komdigi
+- **Tel-U Career Coach (STAR) — Entrepreneurship & Fundamental Public Speaking Training** — Telkom University & FES Management
 
 ---
 
