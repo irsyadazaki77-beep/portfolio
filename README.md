@@ -13,7 +13,7 @@ Website portofolio profesional, modern, dan highly interactive yang merefleksika
 ## 👨‍💻 Profil Singkat
 - **Nama:** Zaki Irsyada Putra
 - **Perguruan Tinggi:** S1 Sistem Informasi, Telkom University Surabaya (2025 - Sekarang)
-- **Fokus Keahlian:** Rekayasa Perangkat Lunak Full-Stack (React 19, TypeScript, Express.js), Sistem AI & LLM (Gemini API, SSE Streaming), Keamanan Privasi (AES-256-GCM, PII Scrubbing), serta Analisis Data & Strategi Bisnis (DSS).
+- **Fokus Keahlian:** Rekayasa Perangkat Lunak Full-Stack (React 19, TypeScript, Express.js), Visualisasi 3D WebGL (Three.js), Sistem AI & Multimodal (Gemini API, Vision AI, Ollama, Semantic Cache), Jaringan P2P (WebRTC, WebSockets), Keamanan Zero-Trust (AES-256-GCM, Firestore Rules, Anti-Cheat), serta Analisis Data & Strategi Bisnis (DSS).
 - **Pengalaman Utama:** Ex-Marketing Manager di PT AGRA DANAPATI PARAMA & Ketua Tim Kompetisi Bisnis Tingkat Nasional (Awakening Reborn).
 
 ---
@@ -44,12 +44,15 @@ Website portofolio profesional, modern, dan highly interactive yang merefleksika
 ---
 
 ## ✨ Proyek Unggulan
-1. **RuangTenang Kampus** — Platform Kesehatan Mental & Konseling Mahasiswa Berbasis AI (Production-Ready)
-2. **ImpactGrid** — AI-Powered Network Sustainability Decision Support System (Studi Kasus Telkomsel)
-3. **SiKaya** — Platform Edukasi & Analisis Investasi Multi-Aset (Saham, Crypto, Obligasi, Emas)
-4. **UOT** — Platform Pembelajaran Digital Interaktif
-5. **OmniTRAF** — Dashboard Visualisasi Telemetri Lalu Lintas
-6. **Voxel-Verse** — Eksplorasi 3D WebGL Canvas di Browser
+1. **[RuangLABmu](https://github.com/irsyadazaki77-beep/RuangLABmu)** — Laboratorium Sains Virtual 3D WebGL (28 Modul Fisika, Kimia, Biologi & Astronomi), Solver RK4 60Hz, Mentor AI Sokratik + Vision (`Dr. LabMu`), Room PIN WebSocket & LMS
+2. **[RuangTenang Kampus v4.0](https://github.com/irsyadazaki77-beep/RuangTenang)** ([Live Demo](https://ruang-tenang-blond.vercel.app)) — Ekosistem Kesehatan Mental AI CBT (Gemini & Ollama Offline), RuangKerja Artifact Studio, Voice Defense Simulator & Enkripsi AES-256-GCM
+3. **[RuangPintar Edge](https://github.com/irsyadazaki77-beep/RuangPIntar)** — LMS Terdesentralisasi Offline-First Wilayah 3T Berbasis WebRTC P2P Mesh (`RPE1` 0 KB Kuota ISP), Single-Gateway AI + SQLite WAL Semantic Cache, Sneakernet USB & 6 Simulasi Vokasi
+4. **[ImpactGrid v1.0.0-rc1](https://github.com/irsyadazaki77-beep/impactgrid-prototype)** — Telkomsel RAN Autonomous Energy Operations Suite & DSS (O-RAN Non-RT RIC rApp, Fail-Safe 112 Drill <3d, Digital Twin, Peta GIS 38 Provinsi, SAP S/4HANA & GRI 302/305)
+5. **[SiKaya](https://github.com/irsyadazaki77-beep/SiKaya)** ([Live Demo](https://si-kaya-eta.vercel.app)) — Platform Edukasi Investasi & Analitik Portofolio Multi-Aset Berstandar Produksi (Trading Arena, Gemini Voice AI Advisor, Zero-Trust Firestore Rules & Ekspor PDF/Excel)
+6. **[ZiGame 2.0](https://github.com/irsyadazaki77-beep/ZiGame2)** — Platform Web Arcade Full-Stack dengan 39 Mini-Game 2D/3D, Server-Authoritative Anti-Cheat Nonce, Ekonomi Koin Idempoten & Leaderboard Elo/MMR
+7. **[VoxelVerse 3D Survival](https://github.com/irsyadazaki77-beep/Voxel-Verse-V1)** ([Live Demo](https://voxel-verse-v1.vercel.app)) — Game Sandbox Survival Open-World Prosedural 3D (React 19, Three.js, WebSocket, Gemini AI & Tauri Desktop)
+8. **[OmniTRAF](https://github.com/irsyadazaki77-beep/omnitraf-ios-dashboard)** — Prototipe Command Center Mobilitas & Telemetri Lalu Lintas (Simulasi Sensor/Kamera, Docker Cluster & Gemini API)
+9. **[UOT — Universe Of Tech](https://github.com/irsyadazaki77-beep/UOT)** — Platform Belajar Teknologi, Pemrograman, Persiapan SNBT/TKA & Pelestarian Bahasa Daerah (OpenAPI & Gemini AI)
 
 ---
 
